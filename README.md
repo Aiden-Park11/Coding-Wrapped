@@ -38,6 +38,15 @@ GitHub와 백준 계정만 연결하면, 1년 동안의 코딩 활동을 스포�
 
 GitHub Pages를 켜면(Settings → Pages → `main` 브랜치) `https://aiden-park11.github.io/Coding-Wrapped/prototype/`에서 바로 볼 수 있어요.
 
+## 백엔드 실행 (맥)
+
+```bash
+git clone https://github.com/Aiden-Park11/Coding-Wrapped.git
+cd Coding-Wrapped
+./backend/run_mac.sh      # 처음엔 .env 비밀값 입력 안내가 떠요
+```
+자세한 내용은 [`backend/README.md`](backend/README.md).
+
 ## 기술 스택 (예정)
 
 - **Frontend**: HTML/CSS/JS 카드 UI, html2canvas(공유 이미지)

@@ -23,18 +23,28 @@ Private key 는 필요 없어요.
 
 > ⚠️ Client Secret 은 `.env` 에만 넣고 채팅·코드·커밋에 붙여넣지 마세요.
 
-## 2. 로컬 실행
+## 2. 로컬 실행 (맥)
 
+**처음 한 번만**
+1. 터미널(⌘+Space → "터미널")에서 `python3 --version` 입력.
+   설치 창이 뜨면 **설치**를 누르세요(개발자 도구가 깔리면서 `git`도 같이 생겨요).
+2. 레포 받기
+   ```bash
+   cd ~/Documents
+   git clone https://github.com/Aiden-Park11/Coding-Wrapped.git
+   ```
+3. GitHub App 설정 → Credentials → **New secret** 으로 비밀값 발급 (한 번만 보이니 바로 복사)
+
+**실행 (매번)**
 ```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-cp .env.example .env               # 값 채우기
-uvicorn app.main:app --reload --port 8000
+cd ~/Documents/Coding-Wrapped
+./backend/run_mac.sh
 ```
+- 처음 실행하면 `.env` 를 만들고 **텍스트 편집기**를 열어줘요 → `GH_CLIENT_SECRET=` 뒤에 붙여넣고 저장 → 다시 `./backend/run_mac.sh`
+- `✅ 준비 완료!` 가 뜨면 브라우저에서 http://localhost:8000/auth/start
+- 끄려면 터미널에서 `Ctrl + C`
 
-브라우저에서 http://localhost:8000 → 프로토타입이 열려요.
+> Windows 메모: 스마트 앱 컨트롤(애플리케이션 제어 정책)이 켜진 PC에서는 `pydantic_core` DLL 이 차단돼 FastAPI 가 실행되지 않아요(11/21 확인). 맥에서 실행하세요.
 
 ## 3. API
 
