@@ -200,11 +200,11 @@ h1,p{margin:0}
 
   <!-- ===== 1. 로그인 ===== -->
   <section class="screen scan" id="login" aria-label="로그인">
-    <div class="tag" style="color:var(--lime);margin-top:8px">// KNU CS · 2026-2</div>
+    <div class="tag" style="color:var(--lime);margin-top:8px">// KNU CS · 2026</div>
     <div id="monitor" style="width:72px" aria-hidden="true"></div>
     <h1 class="logo">CODE<br>WRAPPED</h1>
     <p class="typed" id="typed" aria-label="git wrapped 명령어"><span class="ps">$</span> <span id="typedText"></span><span class="caret" style="color:var(--lime)"></span></p>
-    <p class="sub" style="color:rgba(255,255,255,.72)">한 학기 동안의 커밋과 백준 기록을<br>카드 한 장씩 넘겨보며 돌아봐요.</p>
+    <p class="sub" style="color:rgba(255,255,255,.72)">1년 동안의 커밋과 백준 기록을<br>카드 한 장씩 넘겨보며 돌아봐요.</p>
     <div class="spacer"></div>
     <div class="notice">
       <span>다음 화면에서 <b>초록색 Install</b> 버튼만 누르면 돼요.</span>
@@ -240,23 +240,23 @@ h1,p{margin:0}
 
     <!-- 0 인트로 -->
     <article class="card c-ink scan" data-bars="light">
-      <div class="cmd"><span class="ps">$</span><span class="t">git wrapped --semester 2026-2</span></div>
+      <div class="cmd"><span class="ps">$</span><span class="t">git wrapped --year 2026</span></div>
       <div class="g" id="contrib" aria-hidden="true"></div>
-      <h1 class="title a" style="--d:500ms;font-size:36px">이번 학기,<br>당신은 어떤<br><span style="color:var(--lime)">개발자</span>였을까요?</h1>
-      <p class="sub a" style="--d:650ms;color:rgba(255,255,255,.72)">커밋 1,284개와 백준 213문제를<br>한 장씩 넘겨보며 돌아봐요.</p>
+      <h1 class="title a" style="--d:500ms;font-size:36px">올해,<br>당신은 어떤<br><span style="color:var(--lime)">개발자</span>였을까요?</h1>
+      <p class="sub a" style="--d:650ms;color:rgba(255,255,255,.72)">1년 치 커밋 1,284개와 백준 213문제를<br>한 장씩 넘겨보며 돌아봐요.</p>
       <div class="spacer"></div>
       <p class="tap-note a" style="--d:800ms">[ tap → ] 또는 옆으로 넘기기</p>
     </article>
 
     <!-- 1 올해의 숫자 -->
     <article class="card c-lime is-next" data-bars="dark">
-      <div class="cmd"><span class="ps">$</span><span class="t">git log --since=2026-09 | wc -l</span></div>
+      <div class="cmd"><span class="ps">$</span><span class="t">git log --since=2026-01 | wc -l</span></div>
       <div style="display:flex;flex-direction:column;gap:6px">
-        <p class="a px" style="--d:300ms;font-size:19px">이번 학기 당신은</p>
+        <p class="a px" style="--d:300ms;font-size:19px">올해 당신은</p>
         <div class="big a" style="--d:400ms" data-count="1284">0</div>
         <p class="a px" style="--d:500ms;font-size:19px">번 커밋했어요.</p>
       </div>
-      <p class="comment a" style="--d:650ms">// 하루 평균 10.7번 · 학부 평균의 2.3배</p>
+      <p class="comment a" style="--d:650ms">// 하루 평균 3.9번 · 학부 평균의 2.3배</p>
       <div class="grid2">
         <div class="tile a" style="--d:750ms"><small>repos</small><span class="num" data-count="14">0</span></div>
         <div class="tile a" style="--d:850ms"><small>boj.solved</small><span class="num" data-count="213">0</span></div>
@@ -308,14 +308,14 @@ h1,p{margin:0}
         <span class="pill" style="background:var(--ink);color:#fff">Silver I</span>
       </div>
       <div class="chart a" style="--d:550ms">
-        <span class="mono" style="font-size:12px;font-weight:700">// solved per month</span>
-        <div class="cols" role="img" aria-label="월별 해결 문제 수: 9월 38, 10월 61, 11월 89, 12월 25">
-          <div class="col"><span class="px" style="font-size:13px">38</span><div class="vbar" style="--h:50px;--d:650ms;--c:#CFC8F7"></div></div>
-          <div class="col"><span class="px" style="font-size:13px">61</span><div class="vbar" style="--h:80px;--d:750ms;--c:#9C88F2"></div></div>
-          <div class="col"><span class="px" style="font-size:13px">89</span><div class="vbar" style="--h:110px;--d:850ms;--c:var(--violet)"></div></div>
-          <div class="col"><span class="px" style="font-size:13px">25</span><div class="vbar" style="--h:30px;--d:950ms;--c:#CFC8F7"></div></div>
+        <span class="mono" style="font-size:12px;font-weight:700">// solved per quarter</span>
+        <div class="cols" role="img" aria-label="분기별 해결 문제 수: 1분기 12, 2분기 47, 3분기 66, 4분기 88">
+          <div class="col"><span class="px" style="font-size:13px">12</span><div class="vbar" style="--h:20px;--d:650ms;--c:#CFC8F7"></div></div>
+          <div class="col"><span class="px" style="font-size:13px">47</span><div class="vbar" style="--h:60px;--d:750ms;--c:#CFC8F7"></div></div>
+          <div class="col"><span class="px" style="font-size:13px">66</span><div class="vbar" style="--h:84px;--d:850ms;--c:#9C88F2"></div></div>
+          <div class="col"><span class="px" style="font-size:13px">88</span><div class="vbar" style="--h:110px;--d:950ms;--c:var(--violet)"></div></div>
         </div>
-        <div class="months"><span>SEP</span><span>OCT</span><span>NOV</span><span>DEC</span></div>
+        <div class="months"><span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span></div>
       </div>
       <div class="a" style="--d:1050ms;display:flex;flex-direction:column;gap:8px">
         <span class="mono" style="font-size:12px;font-weight:700">// top tags</span>
@@ -349,7 +349,7 @@ h1,p{margin:0}
     <article class="card c-lime is-next" data-bars="dark">
       <div class="cmd"><span class="ps">$</span><span class="t">wrapped export --png --story</span></div>
       <div class="share a" style="--d:250ms">
-        <div class="share-top"><span style="color:var(--lime);font-weight:700">CODE_WRAPPED.2026-2</span><span style="color:rgba(255,255,255,.65)" id="handle">@your-id</span></div>
+        <div class="share-top"><span style="color:var(--lime);font-weight:700">CODE_WRAPPED.2026</span><span style="color:rgba(255,255,255,.65)" id="handle">@your-id</span></div>
         <div><small class="mono" style="font-size:11px;color:rgba(255,255,255,.65)">type</small><div class="px" style="font-size:24px;line-height:1.3">야행성 몰아치기<br>솔로 리팩토러</div></div>
         <div class="grid2" style="gap:12px">
           <div class="stat"><small>commits</small><span class="num" data-count="1284" data-delay="350">0</span></div>
@@ -359,7 +359,7 @@ h1,p{margin:0}
         </div>
         <div style="height:2px;background:repeating-linear-gradient(90deg,#333 0 6px,transparent 6px 10px)"></div>
         <div style="display:flex;flex-direction:column;gap:8px">
-          <span class="px" style="font-size:14px">다음 학기 처방전</span>
+          <span class="px" style="font-size:14px">내년 처방전</span>
           <div class="rx a" style="--d:650ms"><b>Rx1</b><span>약한 유형 DP: 1149, 9095, 11726 추천</span></div>
           <div class="rx a" style="--d:750ms"><b>Rx2</b><span>커밋은 기능 단위로 잘게 나눠 보기</span></div>
           <div class="rx a" style="--d:850ms"><b>Rx3</b><span>새벽 커밋 비율 38% → 25% 도전</span></div>
@@ -435,7 +435,7 @@ h1,p{margin:0}
   fit();
 
   /* ---------- typing command on login ---------- */
-  var cmdText = 'git wrapped --semester 2026-2';
+  var cmdText = 'git wrapped --year 2026';
   var typedEl = document.getElementById('typedText');
   function typeLogin() {
     var i = 0;
@@ -501,7 +501,7 @@ h1,p{margin:0}
 
   /* ---------- loading terminal ---------- */
   var LOG = [
-    ['dim', '$ git wrapped --semester 2026-2'],
+    ['dim', '$ git wrapped --year 2026'],
     ['', '→ GitHub 인증 확인 ........ ', 'ok', 'OK'],
     ['', '→ 레포 14개 발견 (fork 2개 제외)'],
     ['', '→ 커밋 1,284개 읽는 중 .... ', 'ok', 'OK'],

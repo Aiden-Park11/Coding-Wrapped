@@ -7,13 +7,15 @@
 
 ## 1. 한 줄 소개
 
-GitHub와 백준 계정만 연결하면, 한 학기 동안의 코딩 활동을 스포티파이 Wrapped처럼 넘겨보는 카드로 만들어주는 서비스.
+GitHub와 백준 계정만 연결하면, 1년 동안의 코딩 활동을 스포티파이 Wrapped처럼 넘겨보는 카드로 만들어주는 서비스.
+
+> **분석 기간: 올해 (2026-01-01 ~ 현재)** — 처음엔 이번 학기(9월~)였지만, 학기 데이터만으로는 카드가 비어 보여서 1년 단위로 변경.
 
 ## 2. 왜 필요한가
 
-- **회고**: 컴퓨터학부 학생은 코딩을 많이 하지만 "이번 학기에 뭘 했는지" 돌아보지 않는다. 자동으로 회고를 만들어준다.
+- **회고**: 컴퓨터학부 학생은 코딩을 많이 하지만 "올해 뭘 했는지" 돌아보지 않는다. 자동으로 회고를 만들어준다.
 - **동기부여**: 공유하고 싶은 결과물이 생기면 꾸준히 코딩할 이유가 생긴다.
-- **다음 학기 가이드**: 약한 알고리즘 유형, 개선할 습관을 처방전으로 제시해서 재미로 끝나지 않게 한다.
+- **내년 가이드**: 약한 알고리즘 유형, 개선할 습관을 처방전으로 제시해서 재미로 끝나지 않게 한다.
 
 ---
 
@@ -21,13 +23,13 @@ GitHub와 백준 계정만 연결하면, 한 학기 동안의 코딩 활동을 �
 
 | # | 카드 | 내용 | 데이터 출처 |
 |---|---|---|---|
-| 0 | 인트로 | "이번 학기, 당신은 어떤 개발자였을까요?" | - |
+| 0 | 인트로 | "올해, 당신은 어떤 개발자였을까요?" | - |
 | 1 | 올해의 숫자 | 총 커밋, 기여 레포, 백준 해결 수, 최장 연속 커밋, 주력 언어 | GitHub, solved.ac |
 | 2 | 코딩 시간대 | 요일 × 시간대 히트맵, 새벽 커밋 비율 | GitHub 커밋 시각 |
 | 3 | 커밋 메시지 | 자주 쓴 메시지 순위, 가장 짧은 메시지, 가장 많이 갈아엎은 파일 | GitHub 커밋 |
 | 4 | 백준 성장 | 티어 변화, 월별 해결 수, 많이 푼 유형, 오래 붙잡은 문제 | solved.ac |
 | 5 | 코딩 유형 | 4개 축으로 분류한 유형 이름 + 설명 | 위 데이터 종합 |
-| 6 | 공유 카드 | 요약 이미지 + 다음 학기 처방전 | 위 데이터 종합 |
+| 6 | 공유 카드 | 요약 이미지 + 내년 처방전 | 위 데이터 종합 |
 
 ### 코딩 유형 4개 축
 
@@ -41,7 +43,7 @@ GitHub와 백준 계정만 연결하면, 한 학기 동안의 코딩 활동을 �
 ### 추가 카드 아이디어
 
 - **몰아넣기 지수**: 커밋 수 ÷ 푸시 수 ("한 번 푸시할 때 평균 4.1개씩 몰아서 올렸어요")
-- **force push 횟수**: "이번 학기 강제로 덮어쓴 횟수: 7번"
+- **force push 횟수**: "올해 강제로 덮어쓴 횟수: 7번"
 - **로딩 화면**: "당신의 새벽 커밋을 세는 중…" 문구가 순서대로 바뀌는 화면
 
 ### 디자인 시안
@@ -112,7 +114,7 @@ GitHub → Settings → Developer settings → GitHub Apps → New GitHub App
 5. `GET /user` 로 로그인 아이디 확인
 6. `GET /user/installations/{installation_id}/repositories` 로 허용된 레포 목록
 7. 레포마다 동시에:
-   - `GET /repos/{owner}/{repo}/commits?author={login}&since=2026-09-01T00:00:00Z`
+   - `GET /repos/{owner}/{repo}/commits?since=2026-01-01T00:00:00Z` → 받은 뒤 코드에서 `author.login == 내 아이디`로 필터 (⚠️ `author=` 파라미터는 이메일이 다른 커밋을 빠뜨림, 11/21 실측)
    - `GET /repos/{owner}/{repo}/activity?activity_type=push&actor={login}`
    - `GET /repos/{owner}/{repo}/activity?activity_type=force_push&actor={login}`
 8. 통계 계산 → 캐싱 → 카드 표시
@@ -122,7 +124,7 @@ GitHub → Settings → Developer settings → GitHub Apps → New GitHub App
 ### 푸시 횟수 가져오기
 
 - **Activity API** (`/repos/{owner}/{repo}/activity`): `activity_type=push`, `actor=아이디`로 필터. 레포마다 호출. **← 사용**
-- Events API (`/users/{username}/events`의 PushEvent): 최근 90일(일부 문서는 30일), 최대 300개 제한. 한 학기 통계에는 부족.
+- Events API (`/users/{username}/events`의 PushEvent): 최근 90일(일부 문서는 30일), 최대 300개 제한. 1년 통계에는 쓸 수 없음.
 - 주의: GitHub에 **성공한 푸시만** 기록됨. 실패한 `git push`는 안 세짐.
 
 ---
@@ -141,8 +143,8 @@ GitHub → Settings → Developer settings → GitHub Apps → New GitHub App
 ## 7. 속도 목표: 결과 1분 안에 (목표 10~20초)
 
 - **동시 요청**: 레포를 하나씩이 아니라 한꺼번에 호출 (가장 효과 큼)
-- **건너뛰기**: `pushed_at`이 9월 이전인 레포, 포크 레포는 호출하지 않음
-- **기간 제한**: `since=2026-09-01`
+- **건너뛰기**: `pushed_at`이 올해 이전인 레포, 포크 레포는 호출하지 않음
+- **기간 제한**: `since=2026-01-01` (올해 1월 1일부터)
 - **먼저 보여주기**: 첫 카드(올해의 숫자)는 GraphQL `contributionsCollection` 한 번으로 1~2초 안에. 나머지는 사용자가 카드 보는 동안 뒤에서 계산
 - **캐싱**: 한 번 계산한 결과는 저장해서 재방문 시 바로 표시
 
@@ -154,15 +156,16 @@ API = "https://api.github.com"
 async def fetch_repo(c, full, login, h):
     commits, pushes = await asyncio.gather(
         c.get(f"{API}/repos/{full}/commits",
-              params={"author": login, "since": "2026-09-01T00:00:00Z", "per_page": 100}, headers=h),
+              params={"since": "2026-01-01T00:00:00Z", "per_page": 100}, headers=h),
         c.get(f"{API}/repos/{full}/activity",
               params={"activity_type": "push", "actor": login, "per_page": 100}, headers=h),
     )
-    return {"repo": full, "commits": commits.json(), "pushes": pushes.json()}
+    mine = [x for x in commits.json() if (x.get("author") or {}).get("login") == login]
+    return {"repo": full, "commits": mine, "pushes": pushes.json()}
 
 async def fetch_all(repos, login, h):
     targets = [r["full_name"] for r in repos
-               if not r["fork"] and r["pushed_at"] >= "2026-09-01"]
+               if not r["fork"] and r["pushed_at"] >= "2026-01-01"]
     async with httpx.AsyncClient(timeout=20) as c:
         return await asyncio.gather(*[fetch_repo(c, f, login, h) for f in targets])
 ```
@@ -218,7 +221,7 @@ async def fetch_all(repos, login, h):
 - [ ] **토큰 만료**: 사용자 토큰 기본 8시간. 로그인 직후 분석하면 문제없음
 - [ ] **`installation_id` 누락**: 재로그인 시 안 올 수 있음 → `GET /user/installations`로 조회
 - [ ] **Activity API 권한**: Contents 읽기만으로 호출되는지 **먼저 본인 비공개 레포로 테스트**. 403이면 권한 추가
-- [ ] **Activity API 보관 기간**: 9월 기록까지 나오는지 확인
+- [ ] **Activity API 보관 기간**: **1월 기록까지** 나오는지 확인 (안 남으면 푸시 카드는 "최근 N개월"로 표시)
 - [ ] **학교 조직 레포**: GitHub Classroom 등 조직 레포는 관리자 승인 없이 앱 설치가 안 될 수 있음. 팀원 과제 레포 위치 확인
 - [ ] **호출 제한**: 토큰당 시간당 5,000번. 결과 캐싱으로 대응
 - [ ] **커밋 적은 계정**: 신입생은 데이터가 적을 수 있음. "이제 시작이에요" 카드 준비
