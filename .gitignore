@@ -1,6 +1,7 @@
 # 비밀값 (절대 올리지 않기)
 .env
 .env.*
+!.env.example
 *.pem
 
 # Python
@@ -17,3 +18,4 @@ node_modules/
 Thumbs.db
 .vscode/
 .idea/
+.pytest_cache/

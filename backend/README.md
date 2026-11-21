@@ -1,6 +1,84 @@
 # backend
 
-GitHub App 로그인, 커밋·푸시 데이터 수집, 통계 계산이 들어갈 자리예요.
-설계와 예시 코드는 [`docs/coding-wrapped-plan.md`](../docs/coding-wrapped-plan.md)를 참고하세요.
+GitHub App 로그인 → 올해 커밋·푸시 수집 → 카드용 통계 JSON을 만드는 FastAPI 서버예요.
+`prototype/` 프론트도 이 서버가 같이 서빙해서, 쿠키·CORS 설정이 필요 없어요.
 
-> Client ID / Secret은 `.env`에만 넣고 절대 커밋하지 마세요.
+## 1. GitHub App 등록 (한 번만)
+
+GitHub → Settings → Developer settings → **GitHub Apps → New GitHub App**
+
+| 항목 | 값 |
+|---|---|
+| GitHub App name | 아무거나 (예: `knu-code-wrapped`) → 주소의 이 이름이 `GH_APP_SLUG` |
+| Homepage URL | `http://localhost:8000` (배포 후 실제 주소로) |
+| Callback URL | `http://localhost:8000/auth/callback` |
+| Request user authorization (OAuth) during installation | ✅ 체크 |
+| Webhook → Active | ❌ 체크 해제 |
+| Repository permissions → **Contents** | Read-only |
+| Repository permissions → Metadata | Read-only (기본) |
+| Where can this GitHub App be installed? | **Any account** |
+
+만든 뒤 **Client ID** 복사, **Generate a new client secret** 으로 Secret 발급.
+Private key 는 필요 없어요.
+
+> ⚠️ Client Secret 은 `.env` 에만 넣고 채팅·코드·커밋에 붙여넣지 마세요.
+
+## 2. 로컬 실행
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env               # 값 채우기
+uvicorn app.main:app --reload --port 8000
+```
+
+브라우저에서 http://localhost:8000 → 프로토타입이 열려요.
+
+## 3. API
+
+| 주소 | 설명 |
+|---|---|
+| `GET /auth/start` | 로그인 시작. 첫 방문은 앱 설치 화면, 재방문은 바로 승인 화면 |
+| `GET /auth/callback` | GitHub 가 돌려보내는 주소. `state`·설치 정보 검증 후 분석 시작 |
+| `GET /api/wrapped` | 분석 결과. `status`: `pending` → `done` / `error` (1초마다 폴링) |
+| `GET /api/demo` | 데모 데이터 (발표용, 로그인 불필요) |
+| `GET /api/boj?handle=아이디` | 백준 티어·해결 수·많이 푼 유형 (solved.ac) |
+| `POST /auth/logout` | 세션 삭제 |
+| `GET /health` | 서버 상태 (잠자기 방지 핑용) |
+
+`/api/wrapped` 결과 예시는 `GET /api/demo` 를 보면 같은 모양이에요.
+
+## 4. 동작 원칙
+
+- **올해 레포만**: `pushed_at` 이 올해 이전이거나 포크인 레포는 호출하지 않음
+- **내 커밋 판별**: commits API 의 `author=` 파라미터는 git 이메일이 다른 커밋을 빠뜨려서(11/21 실측),
+  전부 받은 뒤 `author.login` 으로 거름
+- **속도**: 레포별 요청을 동시에(최대 8개) 보내고, 레포당 커밋 1,000개·상세 조회 60개로 제한
+- **보안**: `state` 쿠키로 CSRF 방지, 콜백의 `installation_id` 는 실제 설치 목록과 대조,
+  토큰은 분석이 끝나면 버리고 결과만 메모리에 2시간 보관
+- **푸시 횟수**: Activity API 를 못 쓰면(권한·보관 기간) `null` 로 내려줌 → 프론트에서 카드 숨기기
+
+## 5. 테스트
+
+```bash
+pip install pytest
+python -m pytest -q
+```
+
+가짜 GitHub API 로 로그인 → 수집 → 통계 전체 흐름을 검증해요 (네트워크 불필요).
+
+## 6. 배포 메모
+
+- Render / Railway 등: Start command `uvicorn app.main:app --host 0.0.0.0 --port $PORT`, Root directory `backend`
+- 환경변수에 `.env` 값 입력, `BASE_URL` 은 배포 주소(`https://...`)
+- GitHub App 의 Callback URL / Homepage URL 도 배포 주소로 변경
+- 무료 플랜은 15분 미사용 시 잠들어서 첫 접속이 30~60초 걸림 → 외부 모니터링으로 `/health` 를 5분마다 호출
+
+## 아직 확인할 것
+
+- [ ] 실제 GitHub App 토큰으로 Activity API(push) 가 Contents 읽기 권한만으로 되는지
+- [ ] Activity API 에 올해 1월 기록까지 남아 있는지
+- [ ] solved.ac `user/show`, `user/problem_tag_stats` 응답 형식
+- [ ] 프론트(prototype)에 `/api/wrapped` 연결 (지금은 예시 숫자)
