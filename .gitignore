@@ -1,0 +1,19 @@
+# 비밀값 (절대 올리지 않기)
+.env
+.env.*
+*.pem
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node
+node_modules/
+
+# OS / 에디터
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
