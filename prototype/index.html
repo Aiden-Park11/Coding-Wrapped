@@ -263,6 +263,18 @@ h1,p{margin:0}
 .dv-result .px{font-size:17px}
 .dv-result p{margin:0;font-size:13px;line-height:1.55}
 
+/* 친구 궁합 결과가 카드에 들어올 때 */
+@keyframes mtIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.mt-flash{animation:mtIn .45s steps(4)}
+/* 공유 카드: 찾는 팀원 */
+.wanted{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border:2px dashed var(--ink);background:rgba(255,255,255,.35)}
+.wanted-top{display:flex;justify-content:space-between;align-items:center;font:700 11px var(--mono)}
+.wanted-row{display:flex;align-items:center;gap:10px}
+.wanted-row .pixel-svg{width:30px;flex:none}
+.wanted-row b{font:700 12px var(--mono);color:var(--violet);margin-right:6px}
+.wanted-row span{font-family:var(--px);font-size:17px}
+.wanted p{margin:0;font-size:12.5px;line-height:1.5}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;transition-delay:0ms!important}
 }
@@ -456,8 +468,9 @@ h1,p{margin:0}
           <div class="rx a" style="--d:850ms"><b>Rx3</b><span>새벽 커밋 비율 38% → 25% 도전</span></div>
         </div>
       </div>
+      <div class="wanted a" style="--d:950ms" id="wanted"></div>
       <div class="spacer"></div>
-      <div class="a" style="--d:950ms;display:flex;flex-direction:column;gap:10px">
+      <div class="a" style="--d:1050ms;display:flex;flex-direction:column;gap:10px">
         <button class="btn btn-ink notch" type="button" data-toast="> 프로토타입이라 실제 저장은 안 돼요"><span class="ico" data-ico="floppy"></span>이미지로 저장</button>
         <button class="btn btn-line notch" type="button" data-toast="> 프로토타입이라 실제 공유는 안 돼요"><span class="ico" data-ico="share"></span>스토리로 공유</button>
         <button class="linkbtn" type="button" id="restart">$ restart</button>
@@ -976,6 +989,36 @@ h1,p{margin:0}
       '당신이 ' + (code[0] === 'O' ? '새벽에' : '낮에') + ' 벌여 놓은 코드를, ' + (best[0] === 'O' ? '밤에' : '다음 날 아침') + ' ' +
       (best[3] === 'C' ? '작은 커밋으로 깔끔하게 정리' : '과감하게 리팩터링') + '해 줘요.', 5, spriteFor(best));
     document.getElementById('mtBad').innerHTML = matchCard('✕ DANGER', '#F2A23A', code, MATCH_TEXT[0], 1, pixelSVG(ART.ghost));
+    document.getElementById('mtBtn').textContent = '친구 유형 골라서 궁합 보기 →';
+  }
+
+  /* 친구 유형을 고르면 궁합 카드의 두 번째 칸을 친구 결과로 바꿔서 보여줌 */
+  var FRIEND_LINE = [
+    '똑같은 유형! 같은 시간에 같은 방식으로 달려서 force push 충돌 주의.',
+    '거의 쌍둥이라 편하긴 한데, 서로의 빈틈은 못 메워요.',
+    '적당히 비슷하고 적당히 달라서 무난하게 굴러가는 조합이에요.',
+    '다른 점이 많아서 서로 배울 게 많은 조합이에요.',
+    '정반대라 서로를 완벽하게 보완해 주는 찰떡 조합!'
+  ];
+  function showFriend(code) {
+    var dc = diffCount(MY_CODE, code);
+    var box = document.getElementById('mtBad');
+    box.innerHTML = matchCard('★ 친구 · ' + MY_CODE + ' × ' + code, dc >= 3 ? 'var(--lime)' : dc === 0 ? '#F2A23A' : '#FFFFFF',
+      code, FRIEND_LINE[dc], dc + 1, spriteFor(code));
+    box.firstChild.classList.add('mt-flash');
+    document.getElementById('mtBtn').textContent = '다른 친구 유형 골라 보기 →';
+  }
+
+  /* 공유 카드: 나랑 잘 맞는 팀원 찾기 문구 */
+  function renderWanted(code) {
+    var best = opposite(code);
+    var line = code[0] === 'O'
+      ? '새벽에 벌여 놓은 코드를 아침에 차분히 정리해 줄 팀원을 찾아요.'
+      : '낮에 시작한 일을 밤새 같이 마무리해 줄 팀원을 찾아요.';
+    document.getElementById('wanted').innerHTML =
+      '<div class="wanted-top"><span>WANTED · 나랑 잘 맞는 유형을 찾아요</span><span>♥ 5/5</span></div>' +
+      '<div class="wanted-row">' + spriteFor(best) + '<div><b>' + best + '</b><span>' + DEVTI[best][0] + '</span></div></div>' +
+      '<p>' + line + ' <span class="mono" style="font-size:11px;font-weight:700">#' + code + '와_찰떡 #팀원구해요</span></p>';
   }
 
   var CLASS_BY_LANG = {
@@ -1035,6 +1078,7 @@ h1,p{margin:0}
     var code = devtiOf(d.type.axes);
     renderDevti(code);
     renderMatch(code);
+    renderWanted(code);
     renderRPG(d, boj);
     var share = allCards[8].querySelector('.share');
     share.querySelector('small').textContent = 'devti · ' + code;
@@ -1050,7 +1094,7 @@ h1,p{margin:0}
     setPaused(true);
     pauseBadge.classList.remove('on');
     document.getElementById('dvModalSub').textContent = mode === 'match'
-      ? '친구의 유형을 고르면 ' + MY_CODE + '와의 궁합을 알려줘요.'
+      ? '친구의 유형을 고르면 궁합 카드에서 바로 보여줘요. (내 유형: ' + MY_CODE + ')'
       : '유형을 누르면 설명을 볼 수 있어요. 내 유형은 ' + MY_CODE + '예요.';
     document.getElementById('dvResult').hidden = true;
     var grid = document.getElementById('dvGrid');
@@ -1074,8 +1118,9 @@ h1,p{margin:0}
     t.classList.add('sel');
     var r = document.getElementById('dvResult');
     if (modalMode === 'match') {
-      var dc = diffCount(MY_CODE, c);
-      r.innerHTML = '<span class="px">' + MY_CODE + ' × ' + c + '</span>' + hearts(dc + 1) + '<p>' + MATCH_TEXT[dc] + '</p>';
+      showFriend(c);
+      closeModal();
+      return;
     } else {
       r.innerHTML = '<span class="px">' + c + ' · ' + DEVTI[c][0] + '</span><p>' + DEVTI[c][1] + '</p>';
     }
