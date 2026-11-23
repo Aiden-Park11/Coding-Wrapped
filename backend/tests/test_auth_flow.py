@@ -75,3 +75,31 @@ def test_public_endpoints(monkeypatch):
     assert demo["data"]["numbers"]["commits"] == 1284
     assert c.get("/api/boj", params={"handle": "bad handle!"}).status_code == 400
     assert c.get("/").status_code == 200   # prototype 서빙
+
+
+def test_boj_requires_session_and_hides_debug(monkeypatch):
+    c = _setup(monkeypatch)
+    # 로그인 안 한 사람은 solved.ac 조회 불가 (외부 프록시 악용 방지)
+    assert c.get("/api/boj", params={"handle": "joon_2026"}).status_code == 401
+
+    async def fake_fetch(handle, client):
+        return {"handle": handle, "tier": "Gold IV", "solved": 300, "rating": 1500, "top_tags": None,
+                "max_streak": 3, "keys": ["handle", "tier"], "error": None}
+
+    async def broken_fetch(handle, client):
+        return {"handle": handle, "tier": None, "solved": None, "rating": None, "top_tags": None,
+                "error": "unavailable", "detail": "solved.ac HTTP 401: invalid client"}
+
+    main.SESSIONS["sid1"] = {"created": time.time(), "login": "me", "status": "done", "result": {}}
+    c.cookies.set("cw_sid", "sid1")
+    monkeypatch.setattr(main, "fetch_boj", fake_fetch)
+    body = c.get("/api/boj", params={"handle": "joon_2026"}).json()
+    assert body["solved"] == 300 and "keys" not in body and "detail" not in body
+
+    monkeypatch.setattr(main, "fetch_boj", broken_fetch)
+    body = c.get("/api/boj", params={"handle": "joon_2026"}).json()
+    assert body["error"] == "unavailable" and "detail" not in body
+
+    # 세션당 1분 5회 제한
+    codes = [c.get("/api/boj", params={"handle": "joon_2026"}).status_code for _ in range(5)]
+    assert codes[-1] == 429

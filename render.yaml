@@ -1,0 +1,32 @@
+# Render Blueprint — Dashboard → New → Blueprint → 이 레포 선택하면 아래 설정으로 웹 서비스가 만들어져요.
+# 백엔드(FastAPI)가 prototype/ 프론트도 같이 서빙하므로 서비스 1개면 끝.
+services:
+  - type: web
+    name: coding-wrapped
+    runtime: python
+    plan: free
+    region: singapore
+    # rootDir 는 비워 둬야 함: backend/ 로 잡으면 ../prototype 이 빌드에서 빠져서 / 가 404 가 됨
+    buildCommand: pip install -r backend/requirements.txt
+    # 세션을 메모리에 두므로 워커는 1개 (늘리면 로그인한 워커와 폴링 받는 워커가 달라져 401)
+    startCommand: uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips "*"
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: WRAPPED_YEAR
+        value: "2026"
+      - key: GH_APP_SLUG
+        value: knu-code-wrapped
+      - key: GH_CLIENT_ID
+        value: Iv23liGs4HSg92QcauAC
+      # 아래는 비밀값/배포 주소 → Blueprint 만들 때 대시보드에서 직접 입력 (레포에 값 넣지 않기)
+      - key: GH_CLIENT_SECRET
+        sync: false
+      - key: BASE_URL
+        sync: false
+      - key: SOLVEDAC_CLIENT_ID
+        sync: false
+      - key: SOLVEDAC_CLIENT_SECRET
+        sync: false
