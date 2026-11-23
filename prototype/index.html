@@ -735,21 +735,60 @@ h1,p{margin:0}
     }
     note.textContent = '불러오는 중…';
     note.style.color = '';
-    fetch('/api/boj?handle=' + encodeURIComponent(id))
-      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
-      .then(function (res) {
-        if (!res.ok || res.body.error || res.body.solved == null) {
-          BOJ = null;
-          note.textContent = res.body.error === 'not_found' ? '✗ 그런 아이디가 없어요' : '✗ 백준 기록을 못 가져왔어요 (건너뛰어도 돼요)';
-          note.style.color = '#E85D4A';
-          return;
-        }
-        BOJ = res.body;
-        note.textContent = '✓ ' + (BOJ.tier || '') + ' · ' + BOJ.solved + '문제';
-        note.style.color = '#D4FF3A';
-      })
-      .catch(function () { note.textContent = '✗ 연결 실패 (건너뛰어도 돼요)'; note.style.color = '#E85D4A'; });
+    function ok(data) {
+      BOJ = data;
+      note.textContent = '✓ ' + (BOJ.tier || '') + ' · ' + BOJ.solved + '문제';
+      note.style.color = '#D4FF3A';
+    }
+    function fail(msg) {
+      BOJ = null;
+      note.textContent = msg;
+      note.style.color = '#E85D4A';
+    }
+    // 1) 브라우저에서 solved.ac 직접 조회 (서버 요청은 봇 차단으로 403이 날 수 있음)
+    fetchBojDirect(id).then(ok).catch(function () {
+      // 2) 실패하면 우리 서버를 거쳐서 한 번 더
+      fetch('/api/boj?handle=' + encodeURIComponent(id))
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+        .then(function (res) {
+          if (!res.ok || res.body.error || res.body.solved == null) {
+            fail(res.body.error === 'not_found' ? '✗ solved.ac에 없는 아이디예요' : '✗ 백준 기록을 못 가져왔어요 (건너뛰어도 돼요)');
+            return;
+          }
+          ok(res.body);
+        })
+        .catch(function () { fail('✗ 연결 실패 (건너뛰어도 돼요)'); });
+    });
   });
+
+  var BOJ_TIERS = ['Unrated'];
+  ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Ruby'].forEach(function (t) {
+    ['V', 'IV', 'III', 'II', 'I'].forEach(function (r) { BOJ_TIERS.push(t + ' ' + r); });
+  });
+  BOJ_TIERS.push('Master');
+  function fetchBojDirect(handle) {
+    var base = 'https://solved.ac/api/v3/user/';
+    var q = '?handle=' + encodeURIComponent(handle);
+    return fetch(base + 'show' + q, { headers: { Accept: 'application/json' } })
+      .then(function (r) { if (!r.ok) throw new Error('show ' + r.status); return r.json(); })
+      .then(function (u) {
+        var out = { handle: handle, tier: BOJ_TIERS[u.tier] || null, solved: u.solvedCount, rating: u.rating, top_tags: null };
+        return fetch(base + 'problem_tag_stats' + q, { headers: { Accept: 'application/json' } })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (t) {
+            if (t && t.items) {
+              out.top_tags = t.items.filter(function (i) { return i.solved; })
+                .sort(function (a, b) { return b.solved - a.solved; }).slice(0, 4)
+                .map(function (i) {
+                  var ko = (i.tag.displayNames || []).filter(function (d) { return d.language === 'ko'; })[0];
+                  return { tag: ko ? ko.name : i.tag.key, solved: i.solved };
+                });
+            }
+            return out;
+          })
+          .catch(function () { return out; });
+      });
+  }
 
   document.getElementById('goStory').addEventListener('click', function () {
     if (MODE === 'real' && WRAP) applyData(WRAP, BOJ);
