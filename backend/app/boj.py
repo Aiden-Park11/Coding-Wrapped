@@ -30,7 +30,13 @@ def _ko_tag(tag: dict) -> str:
 async def fetch_boj(handle: str, client: httpx.AsyncClient) -> dict:
     if not HANDLE_RE.match(handle):
         raise ValueError("invalid handle")
-    headers = {"Accept": "application/json"}
+    # solved.ac 는 기본 파이썬 User-Agent 요청을 막을 수 있어서 브라우저처럼 보냄
+    headers = {
+        "Accept": "application/json",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+                      "(KHTML, like Gecko) Chrome/124.0 Safari/537.36 coding-wrapped",
+        "x-solvedac-language": "ko",
+    }
     out = {"handle": handle, "tier": None, "solved": None, "rating": None, "top_tags": None}
 
     try:
@@ -38,11 +44,15 @@ async def fetch_boj(handle: str, client: httpx.AsyncClient) -> dict:
         if r.status_code == 404:
             out["error"] = "not_found"
             return out
-        r.raise_for_status()
+        if r.status_code >= 400:
+            out["error"] = "unavailable"
+            out["detail"] = f"solved.ac HTTP {r.status_code}"
+            return out
         u = r.json()
         out.update(tier=tier_name(u.get("tier")), solved=u.get("solvedCount"), rating=u.get("rating"))
-    except (httpx.HTTPError, ValueError):
+    except (httpx.HTTPError, ValueError) as e:
         out["error"] = "unavailable"
+        out["detail"] = type(e).__name__
         return out
 
     try:
