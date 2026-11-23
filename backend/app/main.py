@@ -4,6 +4,7 @@
 프론트(prototype/)도 이 서버가 같이 서빙해서 쿠키·CORS 문제를 없앤다.
 """
 import asyncio
+import logging
 import secrets
 from contextlib import asynccontextmanager
 import time
@@ -22,6 +23,7 @@ from .github import GitHub, GitHubError, collect_all, exchange_code, get_install
 from .stats import compute
 
 client = httpx.AsyncClient(timeout=20)
+log = logging.getLogger("coding_wrapped")
 
 
 @asynccontextmanager
@@ -153,11 +155,29 @@ async def demo():
     return {"status": "done", "login": DEMO_WRAPPED["login"], "data": DEMO_WRAPPED, "boj": DEMO_BOJ}
 
 
+BOJ_PER_MIN = 5                          # 세션당 1분에 조회 가능한 횟수
+_BOJ_PUBLIC_KEYS = ("handle", "tier", "solved", "rating", "top_tags", "max_streak", "error")
+
+
 @app.get("/api/boj")
-async def boj(handle: str):
+async def boj(request: Request, handle: str):
+    """로그인(GitHub)한 세션에서만 조회. 외부에서 solved.ac 프록시로 쓰이지 않게 막는다 (solved.ac 개발자 약관 제6·7조)."""
     if not HANDLE_RE.match(handle):
         raise HTTPException(400, "백준 아이디 형식이 올바르지 않아요.")
-    return await fetch_boj(handle, client)
+    s = SESSIONS.get(request.cookies.get(SID_COOKIE, ""))
+    if not s:
+        raise HTTPException(401, "로그인이 필요해요.")
+    now = time.time()
+    hits = [t for t in s.get("boj_hits", []) if now - t < 60]
+    if len(hits) >= BOJ_PER_MIN:
+        raise HTTPException(429, "잠시 후 다시 시도해 주세요.")
+    s["boj_hits"] = hits + [now]
+
+    out = await fetch_boj(handle, client)
+    if out.get("error"):
+        # solved.ac 응답 원문·필드 목록은 서버 로그에만 남기고 사용자에게는 보내지 않는다
+        log.warning("boj %s: %s %s", out.get("error"), out.get("detail"), out.get("keys"))
+    return {k: out[k] for k in _BOJ_PUBLIC_KEYS if k in out}
 
 
 # ---------- 프론트 ----------

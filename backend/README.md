@@ -81,10 +81,21 @@ python -m pytest -q
 
 ## 6. 배포 메모
 
-- Render / Railway 등: Start command `uvicorn app.main:app --host 0.0.0.0 --port $PORT`, Root directory `backend`
-- 환경변수에 `.env` 값 입력, `BASE_URL` 은 배포 주소(`https://...`)
-- GitHub App 의 Callback URL / Homepage URL 도 배포 주소로 변경
-- 무료 플랜은 15분 미사용 시 잠들어서 첫 접속이 30~60초 걸림 → 외부 모니터링으로 `/health` 를 5분마다 호출
+레포 루트의 `render.yaml`(Blueprint)로 Render 에 올려요.
+
+1. Render 대시보드 → **New → Blueprint** → 이 레포 선택
+2. 비밀값 입력 칸이 뜨면 채우기
+   - `GH_CLIENT_SECRET`: GitHub App 의 Client secret
+   - `BASE_URL`: `https://coding-wrapped.onrender.com` (실제 서비스 주소, 끝에 `/` 없이)
+   - `SOLVEDAC_CLIENT_ID` / `SOLVEDAC_CLIENT_SECRET`: 없으면 비워 두기 (백준 카드만 꺼짐)
+3. GitHub App 설정에서 **Homepage URL** = `BASE_URL`, **Callback URL** = `BASE_URL/auth/callback` 추가
+4. `https://.../health` 가 `github_configured: true` 인지 확인 → `/` 접속 → 로그인
+
+주의
+- **Root Directory 는 비워 두기.** `backend` 로 잡으면 `prototype/` 이 빠져서 `/` 가 404 예요.
+- **워커 1개 유지.** 세션이 메모리에 있어서 워커를 늘리면 401 이 나요. 재배포·재시작하면 진행 중인 세션은 사라져요.
+- 무료 플랜은 15분 동안 요청이 없으면 잠들어서 첫 접속이 30~60초 걸려요 → cron-job.org 등으로 `/health` 를 10분마다 호출.
+- `/api/boj` 는 GitHub 로그인한 세션에서만, 세션당 1분 5회까지 응답해요 (solved.ac 개발자 약관 제6·7조).
 
 ## 아직 확인할 것
 
