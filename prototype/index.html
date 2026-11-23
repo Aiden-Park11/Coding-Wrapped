@@ -780,6 +780,17 @@ h1,p{margin:0}
     startStory(0);
   });
 
+  /* 백준 카드 제목: 푼 문제 수에 따라 */
+  function bojTitle(n) {
+    if (n === 0) return ['백준은 아직', '시작 전이에요'];
+    if (n < 10) return ['백준에 첫발을', '내디뎠어요'];
+    if (n < 50) return ['알고리즘 근육이', '붙기 시작했어요'];
+    if (n < 200) return ['알고리즘도', '꾸준히 풀었어요'];
+    if (n < 500) return ['이 정도면', '알고리즘 고수예요'];
+    if (n < 1000) return ['백준이 거의', '제2의 고향이에요'];
+    return ['당신은', '걸어 다니는 백준'];
+  }
+
   /* ---------- 실제 데이터 → 카드 ---------- */
   function txt(el, s) { if (el) el.textContent = s; }
   function setCount(el, n, prefix, suffix) {
@@ -841,8 +852,12 @@ h1,p{margin:0}
     txt(minis[1].querySelector('span'), mr ? mr.file + ' × ' + mr.count : '-');
     // 4 boj (없으면 setupCards 에서 숨김)
     if (boj) {
-      txt(c[4].querySelector('h1.title'), '');
-      c[4].querySelector('h1.title').innerHTML = '알고리즘도<br>꾸준히 풀었어요';
+      var bt = bojTitle(boj.solved || 0);
+      var h = c[4].querySelector('h1.title');
+      h.innerHTML = '';
+      h.appendChild(document.createTextNode(bt[0]));
+      h.appendChild(document.createElement('br'));
+      h.appendChild(document.createTextNode(bt[1]));
       var tier = c[4].querySelector('.tier');
       tier.innerHTML = '';
       var p = document.createElement('span');
@@ -864,6 +879,15 @@ h1,p{margin:0}
         }).join('') + '</div>';
       var chips = c[4].querySelector('.chips');
       chips.innerHTML = '';
+      var tagLabel = chips.parentNode.querySelector('span.mono');
+      if (!boj.top_tags || !boj.top_tags.length) {
+        if (tagLabel) tagLabel.textContent = '// first step';
+        var hint = document.createElement('span');
+        hint.className = 'chip';
+        hint.style.background = 'var(--lime)'; hint.style.fontWeight = '700';
+        hint.textContent = '1000번 A+B 부터 시작해 보세요';
+        chips.appendChild(hint);
+      } else if (tagLabel) tagLabel.textContent = '// top tags';
       (boj.top_tags || []).forEach(function (t, i) {
         var ch = document.createElement('span');
         ch.className = 'chip';
@@ -890,6 +914,7 @@ h1,p{margin:0}
     var rx = share.querySelectorAll('.rx span');
     var size = t.axes[3], night = d.time.night_share_0_4;
     txt(rx[0], !d.enough_data ? '내년 목표: 커밋 100개 (작게라도 자주!)'
+      : boj && !boj.solved ? '백준 첫 문제 풀기: 1000번 A+B 부터!'
       : boj && boj.top_tags && boj.top_tags[0] ? '백준: "' + boj.top_tags[0].tag + '" 말고 새 유형도 도전'
       : '백준 아이디를 연결해서 알고리즘도 같이 기록하기');
     txt(rx[1], size.score >= 0.5 ? '커밋은 기능 단위로 잘게 나눠 보기' : '지금처럼 작고 깔끔한 커밋 유지하기');
@@ -1037,6 +1062,7 @@ h1,p{margin:0}
   function renderRPG(d, boj) {
     var n = d.numbers;
     var solved = boj && boj.solved ? boj.solved : 0;
+    var bojOn = !!boj;
     var pts = n.commits * 2 + solved + n.active_days;
     var lv = Math.floor(Math.sqrt(pts)) + 1;
     var lo = (lv - 1) * (lv - 1), hi = lv * lv;
@@ -1063,7 +1089,7 @@ h1,p{margin:0}
       gauge('EXP', pts - lo, hi - lo, '#D4FF3A', 800, Math.round(100 * (pts - lo) / (hi - lo)) + '%') + '</div>' +
       '<div class="rpg-win a" style="--d:650ms;padding:4px 16px 8px">' +
       statRow('STR', '커밋력', null, '커밋', n.commits) +
-      statRow('INT', '알고리즘', solved ? null : '-', solved ? '백준' : '백준 미연결', solved || null) +
+      statRow('INT', '알고리즘', bojOn ? null : '-', bojOn ? '백준' : '백준 미연결', bojOn ? solved : null) +
       statRow('DEX', '손재주', n.languages_count == null ? '-' : null, '언어', n.languages_count) +
       statRow('VIT', '지구력', null, '연속 커밋', n.longest_streak, '일') +
       statRow('LUK', '운', n.force_pushes == null ? '?' : null, 'force push', n.force_pushes) +
