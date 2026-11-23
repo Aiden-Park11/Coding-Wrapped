@@ -153,7 +153,7 @@ h1,p{margin:0}
 
 /* baekjoon */
 .tier{display:flex;align-items:center;gap:10px}
-.pill{padding:7px 12px;font-family:var(--px);font-size:14px;font-weight:700}
+.pill{padding:7px 12px;font-family:var(--px);font-size:14px;font-weight:700;white-space:nowrap}
 .chart{display:flex;flex-direction:column;gap:10px;padding:18px;background:#fff;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
 .cols{display:flex;align-items:flex-end;gap:16px;height:130px}
 .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%}
@@ -838,9 +838,17 @@ h1,p{margin:0}
       tier.appendChild(p);
       var s = document.createElement('span');
       s.className = 'mono'; s.style.fontWeight = '700';
-      s.textContent = boj.solved + ' solved' + (boj.rating ? ' · rating ' + boj.rating : '') + (boj.max_streak ? ' · 최장 ' + boj.max_streak + '일 연속' : '');
+      s.textContent = '@' + boj.handle;
       tier.appendChild(s);
-      c[4].querySelector('.chart').style.display = 'none';
+      var chart = c[4].querySelector('.chart');
+      var cells = [['solved', boj.solved, '문제'], ['rating', boj.rating, ''], ['max_streak', boj.max_streak, '일']];
+      chart.innerHTML = '<span class="mono" style="font-size:12px;font-weight:700">// solved.ac profile</span>' +
+        '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">' +
+        cells.map(function (x) {
+          return '<div style="display:flex;flex-direction:column;gap:4px"><span class="mono" style="font-size:11px;color:#555">' + x[0] + '</span>' +
+            (x[1] == null ? '<span class="px" style="font-size:26px">-</span>'
+              : '<span class="px" style="font-size:26px" data-count="' + x[1] + '" data-suffix="' + x[2] + '" data-delay="600">0</span>') + '</div>';
+        }).join('') + '</div>';
       var chips = c[4].querySelector('.chips');
       chips.innerHTML = '';
       (boj.top_tags || []).forEach(function (t, i) {
@@ -850,8 +858,9 @@ h1,p{margin:0}
         ch.textContent = t.tag + ' ' + t.solved;
         chips.appendChild(ch);
       });
-      var last = c[4].querySelector('.a:last-of-type');
-      if (last && last.textContent.indexOf('longest_struggle') >= 0) last.style.display = 'none';
+      c[4].querySelectorAll('.a').forEach(function (el) {
+        if (el.textContent.indexOf('longest_struggle') >= 0) el.style.display = 'none';
+      });
     }
     // 5~7 DEVTI · 궁합 · RPG
     renderNew(d, boj);
