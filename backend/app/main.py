@@ -16,8 +16,7 @@ from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from . import config
-from .boj import HANDLE_RE, fetch_boj
-from .demo import DEMO_BOJ, DEMO_WRAPPED
+from .demo import DEMO_WRAPPED
 from .github import GitHub, GitHubError, collect_all, exchange_code, get_installations, get_user
 from .stats import compute
 
@@ -150,14 +149,7 @@ async def wrapped(request: Request):
 
 @app.get("/api/demo")
 async def demo():
-    return {"status": "done", "login": DEMO_WRAPPED["login"], "data": DEMO_WRAPPED, "boj": DEMO_BOJ}
-
-
-@app.get("/api/boj")
-async def boj(handle: str):
-    if not HANDLE_RE.match(handle):
-        raise HTTPException(400, "백준 아이디 형식이 올바르지 않아요.")
-    return await fetch_boj(handle, client)
+    return {"status": "done", "login": DEMO_WRAPPED["login"], "data": DEMO_WRAPPED}
 
 
 # ---------- 프론트 ----------

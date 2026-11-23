@@ -72,13 +72,6 @@ h1,p{margin:0}
 .term-body{padding:14px 14px 16px;min-height:262px;font:12.5px/1.85 var(--mono);color:#cfd6d0}
 .term-body .ok{color:var(--lime)}.term-body .dim{color:#7A7A7A}.term-body .vi{color:#A897FF}
 .ascii{font:13px var(--mono);color:var(--lime);white-space:pre}
-.boj{display:flex;flex-direction:column;gap:8px;padding:16px;background:var(--ink2);border:2px solid #2E2E2E}
-.boj label{font-family:var(--px);font-size:14px;font-weight:700}
-.boj-row{display:flex;gap:8px}
-.boj input{flex:1;min-width:0;height:46px;border:2px solid #3A3A3A;background:#0B0B0B;color:#fff;padding:0 12px;font:15px var(--mono)}
-.boj input:focus{outline:none;border-color:var(--lime)}
-.boj button{height:46px;padding:0 16px;border:none;background:var(--lime);color:var(--ink);font-family:var(--px);font-weight:700;cursor:pointer}
-.boj small{font-size:12px;color:rgba(255,255,255,.6)}
 #goStory{opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .4s,transform .4s steps(4)}
 #goStory.show{opacity:1;transform:none;pointer-events:auto}
 
@@ -278,7 +271,7 @@ h1,p{margin:0}
     <div id="monitor" style="width:72px" aria-hidden="true"></div>
     <h1 class="logo">CODE<br>WRAPPED</h1>
     <p class="typed" id="typed" aria-label="git wrapped 명령어"><span class="ps">$</span> <span id="typedText"></span><span class="caret" style="color:var(--lime)"></span></p>
-    <p class="sub" style="color:rgba(255,255,255,.72)">1년 동안의 커밋과 백준 기록을<br>카드 한 장씩 넘겨보며 돌아봐요.</p>
+    <p class="sub" style="color:rgba(255,255,255,.72)">1년 동안의 커밋 기록을<br>카드 한 장씩 넘겨보며 돌아봐요.</p>
     <div class="spacer"></div>
     <div class="notice">
       <span>다음 화면에서 <b>초록색 Install</b> 버튼만 누르면 돼요.</span>
@@ -297,14 +290,6 @@ h1,p{margin:0}
     </div>
     <div class="ascii" id="ascii" aria-hidden="true">[░░░░░░░░░░░░░░░░░░░░]   0%</div>
     <div class="spacer"></div>
-    <form class="boj" id="bojForm">
-      <label for="bojId">기다리는 동안, 백준 아이디도 알려주세요</label>
-      <div class="boj-row">
-        <input id="bojId" type="text" placeholder="예: joon2026" autocomplete="off">
-        <button type="submit">연결</button>
-      </div>
-      <small id="bojNote">로그인 없이 공개 기록만 가져와요. 건너뛰어도 돼요.</small>
-    </form>
     <button class="btn btn-lime notch" id="goStory" type="button">내 Wrapped 보기 →</button>
   </section>
 
@@ -318,7 +303,7 @@ h1,p{margin:0}
       <div class="cmd"><span class="ps">$</span><span class="t">git wrapped --year 2026</span></div>
       <div class="g" id="contrib" aria-hidden="true"></div>
       <h1 class="title a" style="--d:500ms;font-size:36px">올해,<br>당신은 어떤<br><span style="color:var(--lime)">개발자</span>였을까요?</h1>
-      <p class="sub a" style="--d:650ms;color:rgba(255,255,255,.72)">1년 치 커밋 1,284개와 백준 213문제를<br>한 장씩 넘겨보며 돌아봐요.</p>
+      <p class="sub a" style="--d:650ms;color:rgba(255,255,255,.72)">1년 치 커밋 1,284개를<br>한 장씩 넘겨보며 돌아봐요.</p>
       <div class="spacer"></div>
       <p class="tap-note a" style="--d:800ms">← → 방향키 또는 스와이프로 넘기기</p>
     </article>
@@ -334,7 +319,7 @@ h1,p{margin:0}
       <p class="comment a" style="--d:650ms">// 하루 평균 3.9번 · 학부 평균의 2.3배</p>
       <div class="grid2">
         <div class="tile a" style="--d:750ms"><small>repos</small><span class="num" data-count="14">0</span></div>
-        <div class="tile a" style="--d:850ms"><small>boj.solved</small><span class="num" data-count="213">0</span></div>
+        <div class="tile a" style="--d:850ms"><small>active_days</small><span class="num" data-count="201" data-suffix="일">0</span></div>
         <div class="tile a" style="--d:950ms"><small>max_streak</small><span class="num" data-count="23" data-suffix="일">0</span></div>
         <div class="tile a" style="--d:1050ms"><small>main_lang</small><span class="num" data-count="62" data-prefix="C " data-suffix="%">0</span></div>
       </div>
@@ -370,35 +355,6 @@ h1,p{margin:0}
       <div class="grid2">
         <div class="mini a" style="--d:1050ms"><small>shortest_msg</small><span class="px" style="font-size:22px">"ㅁ"</span></div>
         <div class="mini a" style="--d:1150ms"><small>most_rewritten</small><span class="mono" style="font-size:15px;font-weight:700">main.c × 97</span></div>
-      </div>
-    </article>
-
-    <!-- 4 백준 -->
-    <article class="card c-paper is-next" data-bars="dark">
-      <div class="cmd"><span class="ps">$</span><span class="t">curl solved.ac/api/v3/user/show</span></div>
-      <h1 class="title a" style="--d:300ms">알고리즘 실력도<br>한 단계 올라갔어요</h1>
-      <div class="tier a" style="--d:450ms">
-        <span class="pill" style="background:#E8D3BF;color:#6B3A12">Bronze II</span>
-        <span class="mono" style="font-weight:700">──▶</span>
-        <span class="pill" style="background:var(--ink);color:#fff">Silver I</span>
-      </div>
-      <div class="chart a" style="--d:550ms">
-        <span class="mono" style="font-size:12px;font-weight:700">// solved per quarter</span>
-        <div class="cols" role="img" aria-label="분기별 해결 문제 수: 1분기 12, 2분기 47, 3분기 66, 4분기 88">
-          <div class="col"><span class="px" style="font-size:13px">12</span><div class="vbar" style="--h:20px;--d:650ms;--c:#CFC8F7"></div></div>
-          <div class="col"><span class="px" style="font-size:13px">47</span><div class="vbar" style="--h:60px;--d:750ms;--c:#CFC8F7"></div></div>
-          <div class="col"><span class="px" style="font-size:13px">66</span><div class="vbar" style="--h:84px;--d:850ms;--c:#9C88F2"></div></div>
-          <div class="col"><span class="px" style="font-size:13px">88</span><div class="vbar" style="--h:110px;--d:950ms;--c:var(--violet)"></div></div>
-        </div>
-        <div class="months"><span>Q1</span><span>Q2</span><span>Q3</span><span>Q4</span></div>
-      </div>
-      <div class="a" style="--d:1050ms;display:flex;flex-direction:column;gap:8px">
-        <span class="mono" style="font-size:12px;font-weight:700">// top tags</span>
-        <div class="chips"><span class="chip" style="background:var(--lime);font-weight:700">구현 64</span><span class="chip">그리디 31</span><span class="chip">수학 28</span><span class="chip">BFS 17</span></div>
-      </div>
-      <div class="a" style="--d:1150ms;display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--ink);color:#fff;box-shadow:4px 4px 0 var(--violet)">
-        <div style="display:flex;flex-direction:column;gap:2px"><span class="mono" style="font-size:11px;color:rgba(255,255,255,.65)">longest_struggle</span><span style="font-size:15px;font-weight:700">1932 정수 삼각형</span></div>
-        <span class="px" style="font-size:22px;color:var(--lime)">6일</span>
       </div>
     </article>
 
@@ -444,14 +400,14 @@ h1,p{margin:0}
         <div><small class="mono" style="font-size:11px;color:rgba(255,255,255,.65)">type</small><div class="px" style="font-size:24px;line-height:1.3">야행성 몰아치기<br>솔로 리팩토러</div></div>
         <div class="grid2" style="gap:12px">
           <div class="stat"><small>commits</small><span class="num" data-count="1284" data-delay="350">0</span></div>
-          <div class="stat"><small>boj</small><span class="num" data-count="213" data-suffix="문제" data-delay="350">0</span></div>
+          <div class="stat"><small>streak</small><span class="num" data-count="23" data-suffix="일" data-delay="350">0</span></div>
           <div class="stat"><small>main_lang</small><span class="num">C</span></div>
           <div class="stat"><small>top_msg</small><span class="num">"fix"</span></div>
         </div>
         <div style="height:2px;background:repeating-linear-gradient(90deg,#333 0 6px,transparent 6px 10px)"></div>
         <div style="display:flex;flex-direction:column;gap:8px">
           <span class="px" style="font-size:14px">내년 처방전</span>
-          <div class="rx a" style="--d:650ms"><b>Rx1</b><span>약한 유형 DP: 1149, 9095, 11726 추천</span></div>
+          <div class="rx a" style="--d:650ms"><b>Rx1</b><span>내년 목표: 커밋 1,500개 돌파</span></div>
           <div class="rx a" style="--d:750ms"><b>Rx2</b><span>커밋은 기능 단위로 잘게 나눠 보기</span></div>
           <div class="rx a" style="--d:850ms"><b>Rx3</b><span>새벽 커밋 비율 38% → 25% 도전</span></div>
         </div>
@@ -609,7 +565,7 @@ h1,p{margin:0}
 
   /* ---------- backend 연결 ---------- */
   // 백엔드(backend/)가 이 페이지를 서빙하면 실제 로그인, 아니면(GitHub Pages 등) 데모만.
-  var BACKEND = false, MODE = 'demo', WRAP = null, BOJ = null;
+  var BACKEND = false, MODE = 'demo', WRAP = null;
   function hasBackend() {
     if (!/^https?:$/.test(location.protocol)) return Promise.resolve(false);
     return fetch('/health', { cache: 'no-store' })
@@ -723,76 +679,8 @@ h1,p{margin:0}
     runLoading();
   });
 
-  document.getElementById('bojForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var id = document.getElementById('bojId').value.trim();
-    var note = document.getElementById('bojNote');
-    if (!id) return;
-    if (MODE === 'demo' || !BACKEND) {
-      note.textContent = '✓ ' + id + ' 기록을 가져왔어요 (데모)';
-      note.style.color = '#D4FF3A';
-      return;
-    }
-    note.textContent = '불러오는 중…';
-    note.style.color = '';
-    function ok(data) {
-      BOJ = data;
-      note.textContent = '✓ ' + (BOJ.tier || '') + ' · ' + BOJ.solved + '문제';
-      note.style.color = '#D4FF3A';
-    }
-    function fail(msg) {
-      BOJ = null;
-      note.textContent = msg;
-      note.style.color = '#E85D4A';
-    }
-    // 1) 브라우저에서 solved.ac 직접 조회 (서버 요청은 봇 차단으로 403이 날 수 있음)
-    fetchBojDirect(id).then(ok).catch(function () {
-      // 2) 실패하면 우리 서버를 거쳐서 한 번 더
-      fetch('/api/boj?handle=' + encodeURIComponent(id))
-        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
-        .then(function (res) {
-          if (!res.ok || res.body.error || res.body.solved == null) {
-            fail(res.body.error === 'not_found' ? '✗ solved.ac에 없는 아이디예요' : '✗ 백준 기록을 못 가져왔어요 (건너뛰어도 돼요)');
-            return;
-          }
-          ok(res.body);
-        })
-        .catch(function () { fail('✗ 연결 실패 (건너뛰어도 돼요)'); });
-    });
-  });
-
-  var BOJ_TIERS = ['Unrated'];
-  ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Ruby'].forEach(function (t) {
-    ['V', 'IV', 'III', 'II', 'I'].forEach(function (r) { BOJ_TIERS.push(t + ' ' + r); });
-  });
-  BOJ_TIERS.push('Master');
-  function fetchBojDirect(handle) {
-    var base = 'https://solved.ac/api/v3/user/';
-    var q = '?handle=' + encodeURIComponent(handle);
-    return fetch(base + 'show' + q, { headers: { Accept: 'application/json' } })
-      .then(function (r) { if (!r.ok) throw new Error('show ' + r.status); return r.json(); })
-      .then(function (u) {
-        var out = { handle: handle, tier: BOJ_TIERS[u.tier] || null, solved: u.solvedCount, rating: u.rating, top_tags: null };
-        return fetch(base + 'problem_tag_stats' + q, { headers: { Accept: 'application/json' } })
-          .then(function (r) { return r.ok ? r.json() : null; })
-          .then(function (t) {
-            if (t && t.items) {
-              out.top_tags = t.items.filter(function (i) { return i.solved; })
-                .sort(function (a, b) { return b.solved - a.solved; }).slice(0, 4)
-                .map(function (i) {
-                  var ko = (i.tag.displayNames || []).filter(function (d) { return d.language === 'ko'; })[0];
-                  return { tag: ko ? ko.name : i.tag.key, solved: i.solved };
-                });
-            }
-            return out;
-          })
-          .catch(function () { return out; });
-      });
-  }
-
   document.getElementById('goStory').addEventListener('click', function () {
-    if (MODE === 'real' && WRAP) applyData(WRAP, BOJ);
-    setupCards(MODE === 'real' && !BOJ);
+    if (MODE === 'real' && WRAP) applyData(WRAP);
     showScreen(story, loading);
     startStory(0);
   });
@@ -812,19 +700,17 @@ h1,p{margin:0}
     if (h < 18) return '낮';
     return '밤';
   }
-  function applyData(d, boj) {
+  function applyData(d) {
     var c = allCards, n = d.numbers;
     // 0 intro
-    c[0].querySelector('p.sub').textContent = '올해 커밋 ' + n.commits.toLocaleString('ko-KR') + '개' +
-      (boj ? '와 백준 ' + boj.solved + '문제를' : '를') + '\n한 장씩 넘겨보며 돌아봐요.';
+    c[0].querySelector('p.sub').textContent = '올해 커밋 ' + n.commits.toLocaleString('ko-KR') + '개를\n한 장씩 넘겨보며 돌아봐요.';
     c[0].querySelector('p.sub').style.whiteSpace = 'pre-line';
     // 1 numbers
     setCount(c[1].querySelector('.big'), n.commits);
     txt(c[1].querySelector('.comment'), '// 하루 평균 ' + n.daily_avg + '번 · 커밋한 날 ' + n.active_days + '일');
     var tiles = c[1].querySelectorAll('.tile');
     setCount(tiles[0].querySelector('.num'), n.repos);
-    if (boj) { txt(tiles[1].querySelector('small'), 'boj.solved'); setCount(tiles[1].querySelector('.num'), boj.solved, '', ''); }
-    else { txt(tiles[1].querySelector('small'), 'active_days'); setCount(tiles[1].querySelector('.num'), n.active_days, '', '일'); }
+    setCount(tiles[1].querySelector('.num'), n.active_days, '', '일');
     setCount(tiles[2].querySelector('.num'), n.longest_streak, '', '일');
     if (n.main_language) setCount(tiles[3].querySelector('.num'), n.main_language.percent, n.main_language.name + ' ', '%');
     if (n.main_language && n.main_language.name.length > 4) { tiles[3].querySelector('.num').style.fontSize = '20px'; tiles[3].querySelector('.num').style.lineHeight = '1.3'; }
@@ -856,50 +742,21 @@ h1,p{margin:0}
     txt(minis[0].querySelector('span'), d.messages.shortest ? '"' + d.messages.shortest.slice(0, 12) + '"' : '-');
     var mr = d.messages.most_rewritten;
     txt(minis[1].querySelector('span'), mr ? mr.file + ' × ' + mr.count : '-');
-    // 4 boj (없으면 setupCards 에서 숨김)
-    if (boj) {
-      txt(c[4].querySelector('h1.title'), '');
-      c[4].querySelector('h1.title').innerHTML = '알고리즘도<br>꾸준히 풀었어요';
-      var tier = c[4].querySelector('.tier');
-      tier.innerHTML = '';
-      var p = document.createElement('span');
-      p.className = 'pill'; p.style.background = 'var(--ink)'; p.style.color = '#fff';
-      p.textContent = boj.tier || 'Unrated';
-      tier.appendChild(p);
-      var s = document.createElement('span');
-      s.className = 'mono'; s.style.fontWeight = '700';
-      s.textContent = boj.solved + ' solved' + (boj.rating ? ' · rating ' + boj.rating : '');
-      tier.appendChild(s);
-      c[4].querySelector('.chart').style.display = 'none';
-      var chips = c[4].querySelector('.chips');
-      chips.innerHTML = '';
-      (boj.top_tags || []).forEach(function (t, i) {
-        var ch = document.createElement('span');
-        ch.className = 'chip';
-        if (i === 0) { ch.style.background = 'var(--lime)'; ch.style.fontWeight = '700'; }
-        ch.textContent = t.tag + ' ' + t.solved;
-        chips.appendChild(ch);
-      });
-      var last = c[4].querySelector('.a:last-of-type');
-      if (last && last.textContent.indexOf('longest_struggle') >= 0) last.style.display = 'none';
-    }
-    // 5~7 DEVTI · 궁합 · RPG
-    renderNew(d, boj);
+    // 4~6 DEVTI · 궁합 · RPG
+    renderNew(d);
     var t = d.type;
-    // 8 share
+    // 7 share
     txt(document.getElementById('handle'), '@' + d.login);
-    var share = c[8].querySelector('.share');
+    var share = c[7].querySelector('.share');
     var stats = share.querySelectorAll('.stat');
     setCount(stats[0].querySelector('.num'), n.commits);
-    if (boj) { txt(stats[1].querySelector('small'), 'boj'); setCount(stats[1].querySelector('.num'), boj.solved, '', '문제'); }
-    else { txt(stats[1].querySelector('small'), 'streak'); setCount(stats[1].querySelector('.num'), n.longest_streak, '', '일'); }
+    setCount(stats[1].querySelector('.num'), n.longest_streak, '', '일');
     txt(stats[2].querySelector('.num'), n.main_language ? n.main_language.name : '-');
     txt(stats[3].querySelector('.num'), top.length ? '"' + top[0].message.slice(0, 8) + '"' : '-');
     var rx = share.querySelectorAll('.rx span');
     var size = t.axes[3], night = d.time.night_share_0_4;
     txt(rx[0], !d.enough_data ? '내년 목표: 커밋 100개 (작게라도 자주!)'
-      : boj && boj.top_tags && boj.top_tags[0] ? '백준: "' + boj.top_tags[0].tag + '" 말고 새 유형도 도전'
-      : '백준 아이디를 연결해서 알고리즘도 같이 기록하기');
+      : '내년 목표: 커밋 ' + (Math.ceil(n.commits * 1.5 / 10) * 10).toLocaleString('ko-KR') + '개 돌파');
     txt(rx[1], size.score >= 0.5 ? '커밋은 기능 단위로 잘게 나눠 보기' : '지금처럼 작고 깔끔한 커밋 유지하기');
     txt(rx[2], night >= 20 ? '새벽 커밋 비율 ' + night + '% → ' + Math.max(5, night - 15) + '% 도전' : '지금의 건강한 코딩 시간 유지하기');
   }
@@ -907,8 +764,8 @@ h1,p{margin:0}
   /* ---------- story ---------- */
   var allCards = cards.slice();
   var fills = [];
-  function setupCards(skipBoj) {
-    cards = allCards.filter(function (c, i) { return !(skipBoj && i === 4); });
+  function setupCards() {
+    cards = allCards.slice();
     allCards.forEach(function (c) { c.style.display = cards.indexOf(c) >= 0 ? '' : 'none'; });
     barsEl.innerHTML = '';
     cards.forEach(function () {
@@ -918,7 +775,7 @@ h1,p{margin:0}
     });
     fills = barsEl.querySelectorAll('span');
   }
-  setupCards(false);
+  setupCards();
   /* ---------- DEVTI · 궁합 · RPG ---------- */
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (ch) {
@@ -1012,10 +869,9 @@ h1,p{margin:0}
     var v = count != null ? '<strong data-count="' + count + '" data-suffix="' + (suffix || '') + '" data-delay="700">0</strong>' : '<strong>' + val + '</strong>';
     return '<div class="stat-row"><span><b>' + k + '</b> ' + label + '</span><span>' + v + '<small>' + note + '</small></span></div>';
   }
-  function renderRPG(d, boj) {
+  function renderRPG(d) {
     var n = d.numbers;
-    var solved = boj && boj.solved ? boj.solved : 0;
-    var pts = n.commits * 2 + solved + n.active_days;
+    var pts = n.commits * 2 + n.repos * 5 + n.active_days;
     var lv = Math.floor(Math.sqrt(pts)) + 1;
     var lo = (lv - 1) * (lv - 1), hi = lv * lv;
     var need = Math.max(1, Math.ceil((hi - pts) / 2));
@@ -1041,7 +897,7 @@ h1,p{margin:0}
       gauge('EXP', pts - lo, hi - lo, '#D4FF3A', 800, Math.round(100 * (pts - lo) / (hi - lo)) + '%') + '</div>' +
       '<div class="rpg-win a" style="--d:650ms;padding:4px 16px 8px">' +
       statRow('STR', '커밋력', null, '커밋', n.commits) +
-      statRow('INT', '알고리즘', solved ? null : '-', solved ? '백준' : '백준 미연결', solved || null) +
+      statRow('INT', '탐구력', null, '레포', n.repos) +
       statRow('DEX', '손재주', n.languages_count == null ? '-' : null, '언어', n.languages_count) +
       statRow('VIT', '지구력', null, '연속 커밋', n.longest_streak, '일') +
       statRow('LUK', '운', n.force_pushes == null ? '?' : null, 'force push', n.force_pushes) +
@@ -1052,12 +908,12 @@ h1,p{margin:0}
       '<div class="rpg-msg a" style="--d:1000ms">레벨업까지 커밋 ' + need + '개 남았어요!<br><span class="blinky" style="color:var(--lime)">▼</span></div>';
   }
 
-  function renderNew(d, boj) {
+  function renderNew(d) {
     var code = devtiOf(d.type.axes);
     renderDevti(code);
     renderMatch(code);
-    renderRPG(d, boj);
-    var share = allCards[8].querySelector('.share');
+    renderRPG(d);
+    var share = allCards[7].querySelector('.share');
     share.querySelector('small').textContent = 'devti · ' + code;
     share.querySelector('.px').textContent = DEVTI[code][0];
   }
@@ -1115,8 +971,7 @@ h1,p{margin:0}
     messages: { most_rewritten: { file: 'main.c', count: 97 } },
     type: { axes: [0.78, 0.64, 0.83, 0.71] }
   };
-  var DEMO_BOJ_DATA = { solved: 213 };
-  renderNew(DEMO_DATA, DEMO_BOJ_DATA);
+  renderNew(DEMO_DATA);
   var idx = 0, elapsed = 0, last = 0, paused = false, running = false, raf = null;
 
   function countUp(el) {
