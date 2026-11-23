@@ -275,6 +275,19 @@ h1,p{margin:0}
 .wanted-row span{font-family:var(--px);font-size:17px}
 .wanted p{margin:0;font-size:12.5px;line-height:1.5}
 
+/* 신입 응원 카드 */
+.quest{display:flex;flex-direction:column;gap:10px;padding:16px;background:rgba(17,17,17,.4);border:2px solid rgba(255,255,255,.2)}
+.quest .q{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5}
+.quest .q i{flex:none;width:14px;height:14px;margin-top:4px;border:2px solid var(--lime)}
+.quest .q b{display:block;font-size:11px;font-weight:500;color:rgba(255,255,255,.7)}
+
+/* 이미지 저장용 (화면 밖에서 그려서 PNG로) */
+.export{position:fixed;left:-10000px;top:0;width:360px;min-height:640px;padding:28px 24px 22px;display:flex;flex-direction:column;gap:14px;
+  background:var(--lime);background-image:radial-gradient(rgba(17,17,17,.08) 1px,transparent 1.2px);background-size:12px 12px;color:var(--ink);font-family:'Noto Sans KR',sans-serif}
+.export *{transition:none!important;animation:none!important}
+.ex-top{display:flex;justify-content:space-between;font:700 12px var(--mono)}
+.ex-foot{margin-top:auto;padding-top:6px;text-align:center;font:500 10px/1.6 var(--mono);opacity:.75;white-space:pre-line}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;transition-delay:0ms!important}
 }
@@ -326,7 +339,7 @@ h1,p{margin:0}
     <div class="pause-badge" id="pauseBadge">|| PAUSED</div>
 
     <!-- 0 인트로 -->
-    <article class="card c-ink scan" data-bars="light">
+    <article class="card c-ink scan" data-bars="light" data-key="intro">
       <div class="cmd"><span class="ps">$</span><span class="t">git wrapped --year 2026</span></div>
       <div class="g" id="contrib" aria-hidden="true"></div>
       <h1 class="title a" style="--d:500ms;font-size:36px">올해,<br>당신은 어떤<br><span style="color:var(--lime)">개발자</span>였을까요?</h1>
@@ -335,7 +348,7 @@ h1,p{margin:0}
     </article>
 
     <!-- 1 올해의 숫자 -->
-    <article class="card c-lime is-next" data-bars="dark">
+    <article class="card c-lime is-next" data-bars="dark" data-key="numbers">
       <div class="cmd"><span class="ps">$</span><span class="t">git log --since=2026-01 | wc -l</span></div>
       <div style="display:flex;flex-direction:column;gap:6px">
         <p class="a px" style="--d:300ms;font-size:19px">올해 당신은</p>
@@ -351,8 +364,30 @@ h1,p{margin:0}
       </div>
     </article>
 
+    <!-- 1.5 신입 응원 카드 (커밋 10개 미만일 때만) -->
+    <article class="card c-violet is-next" data-bars="light" data-key="rookie">
+      <div class="cmd"><span class="ps">$</span><span class="t">git log --oneline | wc -l</span></div>
+      <div class="a" style="--d:300ms;display:flex;align-items:center;gap:16px">
+        <div id="rkSprite" style="width:84px;flex:none"></div>
+        <span class="badge">LV.1 ROOKIE</span>
+      </div>
+      <h1 class="title a" style="--d:450ms">커밋 <span id="rkN" style="color:var(--lime)">0</span>개,<br>이제 막 시작했어요</h1>
+      <p class="sub a" style="--d:600ms;color:rgba(255,255,255,.88)">모든 시니어 개발자도 첫 커밋부터 시작했어요.<br>내년 이맘때는 이 카드가 훨씬 꽉 차 있을 거예요.</p>
+      <div class="quest a" style="--d:750ms">
+        <span class="mono" style="font-size:12px;font-weight:700;color:var(--lime)">// 다음 퀘스트</span>
+        <div class="q"><i></i><span>일주일 동안 하루에 커밋 1개씩</span></div>
+        <div class="q"><i></i><span>커밋 메시지 구체적으로 쓰기 <b class="mono">fix → fix: 로그인 버그</b></span></div>
+        <div class="q"><i></i><span>내 레포에 README 한 줄 써 보기</span></div>
+      </div>
+      <div class="spacer"></div>
+      <div class="a" style="--d:950ms;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;font:700 12px var(--mono)"><span>NEXT LEVEL</span><span id="rkNeed">커밋 10개 남음</span></div>
+        <div class="trk" style="height:14px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.2) 0 8px,transparent 8px 10px)"><div class="fill lime" id="rkFill" style="--w:0%;--d:1050ms"></div></div>
+      </div>
+    </article>
+
     <!-- 2 코딩 시간대 -->
-    <article class="card c-ink scan is-next" data-bars="light">
+    <article class="card c-ink scan is-next" data-bars="light" data-key="time">
       <div class="cmd"><span class="ps">$</span><span class="t">git log --date=format:%H | hist</span></div>
       <div class="a" style="--d:300ms;display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
         <h1 class="title">당신의 코드는<br><span style="color:var(--lime)">새벽</span>에 피어났어요</h1>
@@ -368,7 +403,7 @@ h1,p{margin:0}
     </article>
 
     <!-- 3 커밋 메시지 -->
-    <article class="card c-violet is-next" data-bars="light">
+    <article class="card c-violet is-next" data-bars="light" data-key="msgs">
       <div class="cmd"><span class="ps">$</span><span class="t">git log --format=%s | sort | uniq -c</span></div>
       <h1 class="title a" style="--d:300ms">커밋 메시지가<br>다 말해주고 있어요</h1>
       <div style="display:flex;flex-direction:column;gap:13px">
@@ -385,7 +420,7 @@ h1,p{margin:0}
     </article>
 
     <!-- 4 백준 -->
-    <article class="card c-paper is-next" data-bars="dark">
+    <article class="card c-paper is-next" data-bars="dark" data-key="boj">
       <div class="cmd"><span class="ps">$</span><span class="t">curl solved.ac/api/v4/users/you</span></div>
       <h1 class="title a" style="--d:300ms">알고리즘 실력도<br>한 단계 올라갔어요</h1>
       <div class="tier a" style="--d:450ms">
@@ -414,7 +449,7 @@ h1,p{margin:0}
     </article>
 
     <!-- 5 DEVTI: 개발자 MBTI -->
-    <article class="card c-ink scan is-next" data-bars="light">
+    <article class="card c-ink scan is-next" data-bars="light" data-key="devti">
       <div class="cmd"><span class="ps">$</span><span class="t">./devti --analyze --user=you</span></div>
       <p class="a px" style="--d:300ms;font-size:17px;color:rgba(255,255,255,.8)">당신의 개발자 MBTI는…</p>
       <div class="dv-letters" id="dvLetters"></div>
@@ -432,7 +467,7 @@ h1,p{margin:0}
     </article>
 
     <!-- 6 팀플 궁합 -->
-    <article class="card c-violet is-next" data-bars="light">
+    <article class="card c-violet is-next" data-bars="light" data-key="match">
       <div class="cmd"><span class="ps">$</span><span class="t">./devti --match --team</span></div>
       <h1 class="title a" style="--d:300ms">팀플 궁합,<br>미리 알아봤어요</h1>
       <div class="a" style="--d:450ms" id="mtBest"></div>
@@ -442,13 +477,13 @@ h1,p{margin:0}
     </article>
 
     <!-- 7 RPG 스탯창 -->
-    <article class="card c-ink scan is-next" data-bars="light">
+    <article class="card c-ink scan is-next" data-bars="light" data-key="rpg">
       <div class="cmd"><span class="ps">$</span><span class="t">cat ~/.profile --rpg</span></div>
       <div id="rpg" style="display:flex;flex-direction:column;gap:14px;flex:1"></div>
     </article>
 
     <!-- 6 공유 -->
-    <article class="card c-lime is-next" data-bars="dark">
+    <article class="card c-lime is-next" data-bars="dark" data-key="share">
       <div class="cmd"><span class="ps">$</span><span class="t">wrapped export --png --story</span></div>
       <div class="share a" style="--d:250ms">
         <div class="share-top"><span style="color:var(--lime);font-weight:700">CODE_WRAPPED.2026</span><span style="color:rgba(255,255,255,.65)" id="handle">@your-id</span></div>
@@ -470,8 +505,8 @@ h1,p{margin:0}
       <div class="wanted a" style="--d:950ms" id="wanted"></div>
       <div class="spacer"></div>
       <div class="a" style="--d:1050ms;display:flex;flex-direction:column;gap:10px">
-        <button class="btn btn-ink notch" type="button" data-toast="> 프로토타입이라 실제 저장은 안 돼요"><span class="ico" data-ico="floppy"></span>이미지로 저장</button>
-        <button class="btn btn-line notch" type="button" data-toast="> 프로토타입이라 실제 공유는 안 돼요"><span class="ico" data-ico="share"></span>스토리로 공유</button>
+        <button class="btn btn-ink notch" type="button" id="saveImg"><span class="ico" data-ico="floppy"></span><span class="lbl">이미지로 저장</span></button>
+        <button class="btn btn-line notch" type="button" id="shareImg"><span class="ico" data-ico="share"></span><span class="lbl">스토리로 공유</span></button>
         <button class="linkbtn" type="button" id="restart">$ restart</button>
       </div>
     </article>
@@ -773,7 +808,7 @@ h1,p{margin:0}
 
   document.getElementById('goStory').addEventListener('click', function () {
     if (MODE === 'real' && WRAP) applyData(WRAP, BOJ);
-    setupCards(MODE === 'real' && !BOJ);
+    setupCards(MODE === 'real' && !BOJ, MODE === 'real' && WRAP && !WRAP.enough_data);
     showScreen(story, loading);
     startStory(0);
   });
@@ -805,15 +840,15 @@ h1,p{margin:0}
     return '밤';
   }
   function applyData(d, boj) {
-    var c = allCards, n = d.numbers;
+    var c = K, n = d.numbers;
     // 0 intro
-    c[0].querySelector('p.sub').textContent = '올해 커밋 ' + n.commits.toLocaleString('ko-KR') + '개' +
+    c.intro.querySelector('p.sub').textContent = '올해 커밋 ' + n.commits.toLocaleString('ko-KR') + '개' +
       (boj ? '와 백준 ' + boj.solved + '문제를' : '를') + '\n한 장씩 넘겨보며 돌아봐요.';
-    c[0].querySelector('p.sub').style.whiteSpace = 'pre-line';
+    c.intro.querySelector('p.sub').style.whiteSpace = 'pre-line';
     // 1 numbers
-    setCount(c[1].querySelector('.big'), n.commits);
-    txt(c[1].querySelector('.comment'), '// 하루 평균 ' + n.daily_avg + '번 · 커밋한 날 ' + n.active_days + '일');
-    var tiles = c[1].querySelectorAll('.tile');
+    setCount(c.numbers.querySelector('.big'), n.commits);
+    txt(c.numbers.querySelector('.comment'), '// 하루 평균 ' + n.daily_avg + '번 · 커밋한 날 ' + n.active_days + '일');
+    var tiles = c.numbers.querySelectorAll('.tile');
     setCount(tiles[0].querySelector('.num'), n.repos);
     if (boj) { txt(tiles[1].querySelector('small'), 'boj.solved'); setCount(tiles[1].querySelector('.num'), boj.solved, '', ''); }
     else { txt(tiles[1].querySelector('small'), 'active_days'); setCount(tiles[1].querySelector('.num'), n.active_days, '', '일'); }
@@ -821,21 +856,28 @@ h1,p{margin:0}
     if (n.main_language) setCount(tiles[3].querySelector('.num'), n.main_language.percent, n.main_language.name + ' ', '%');
     if (n.main_language && n.main_language.name.length > 4) { tiles[3].querySelector('.num').style.fontSize = '20px'; tiles[3].querySelector('.num').style.lineHeight = '1.3'; }
     else { tiles[3].querySelector('.num').removeAttribute('data-count'); txt(tiles[3].querySelector('.num'), '-'); }
+    // 1.5 rookie
+    if (!d.enough_data) {
+      var need = Math.max(1, 10 - n.commits);
+      txt(document.getElementById('rkN'), String(n.commits));
+      txt(document.getElementById('rkNeed'), '커밋 ' + need + '개 남음');
+      document.getElementById('rkFill').style.setProperty('--w', Math.round(100 * n.commits / 10) + '%');
+    }
     // 2 time
-    var hm = d.time.heatmap.levels, cells = c[2].querySelectorAll('.cell'), k = 0;
+    var hm = d.time.heatmap.levels, cells = c.time.querySelectorAll('.cell'), k = 0;
     for (var r = 0; r < 7; r++) for (var col = 0; col < 12; col++) { cells[k++].style.background = colors[hm[r][col]]; }
     var tw = timeWord(d.time.peak_hour);
-    var h1 = c[2].querySelector('h1.title');
+    var h1 = c.time.querySelector('h1.title');
     h1.innerHTML = '당신의 코드는<br><span style="color:var(--lime)"></span>에 피어났어요';
     h1.querySelector('span').textContent = tw;
     document.getElementById('icoMoon').style.visibility = tw === '새벽' || tw === '밤' ? 'visible' : 'hidden';
-    var call = c[2].querySelector('.callout');
+    var call = c.time.querySelector('.callout');
     setCount(call.querySelector('[data-count]'), d.time.night_share_0_4, '', '%');
     var lines = call.querySelectorAll(':scope > span');
     txt(lines[2], d.time.peak_hour == null ? '' : '가장 많이 커밋한 시간: ' + d.time.peak_hour + '시');
     // 3 messages
     var top = d.messages.top, max = top.length ? top[0].count : 1;
-    c[3].querySelectorAll('.rank').forEach(function (row, i) {
+    c.msgs.querySelectorAll('.rank').forEach(function (row, i) {
       var m = top[i];
       row.style.display = m ? '' : 'none';
       if (!m) return;
@@ -844,19 +886,19 @@ h1,p{margin:0}
       setCount(row.querySelector('[data-count]'), m.count, '', '×');
       row.querySelector('.fill').style.setProperty('--w', Math.max(4, Math.round(100 * m.count / max)) + '%');
     });
-    var minis = c[3].querySelectorAll('.mini');
+    var minis = c.msgs.querySelectorAll('.mini');
     txt(minis[0].querySelector('span'), d.messages.shortest ? '"' + d.messages.shortest.slice(0, 12) + '"' : '-');
     var mr = d.messages.most_rewritten;
     txt(minis[1].querySelector('span'), mr ? mr.file + ' × ' + mr.count : '-');
     // 4 boj (없으면 setupCards 에서 숨김)
     if (boj) {
       var bt = bojTitle(boj.solved || 0);
-      var h = c[4].querySelector('h1.title');
+      var h = c.boj.querySelector('h1.title');
       h.innerHTML = '';
       h.appendChild(document.createTextNode(bt[0]));
       h.appendChild(document.createElement('br'));
       h.appendChild(document.createTextNode(bt[1]));
-      var tier = c[4].querySelector('.tier');
+      var tier = c.boj.querySelector('.tier');
       tier.innerHTML = '';
       var p = document.createElement('span');
       p.className = 'pill'; p.style.background = 'var(--ink)'; p.style.color = '#fff';
@@ -866,7 +908,7 @@ h1,p{margin:0}
       s.className = 'mono'; s.style.fontWeight = '700';
       s.textContent = '@' + boj.handle;
       tier.appendChild(s);
-      var chart = c[4].querySelector('.chart');
+      var chart = c.boj.querySelector('.chart');
       var cells = [['solved', boj.solved, '문제'], ['rating', boj.rating, ''], ['max_streak', boj.max_streak, '일']];
       chart.innerHTML = '<span class="mono" style="font-size:12px;font-weight:700">// solved.ac profile</span>' +
         '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">' +
@@ -875,7 +917,7 @@ h1,p{margin:0}
             (x[1] == null ? '<span class="px" style="font-size:26px">-</span>'
               : '<span class="px" style="font-size:26px" data-count="' + x[1] + '" data-suffix="' + x[2] + '" data-delay="600">0</span>') + '</div>';
         }).join('') + '</div>';
-      var chips = c[4].querySelector('.chips');
+      var chips = c.boj.querySelector('.chips');
       chips.innerHTML = '';
       var tagLabel = chips.parentNode.querySelector('span.mono');
       if (!boj.top_tags || !boj.top_tags.length) {
@@ -893,7 +935,7 @@ h1,p{margin:0}
         ch.textContent = t.tag + ' ' + t.solved;
         chips.appendChild(ch);
       });
-      c[4].querySelectorAll('.a').forEach(function (el) {
+      c.boj.querySelectorAll('.a').forEach(function (el) {
         if (el.textContent.indexOf('longest_struggle') >= 0) el.style.display = 'none';
       });
     }
@@ -902,7 +944,7 @@ h1,p{margin:0}
     var t = d.type;
     // 8 share
     txt(document.getElementById('handle'), '@' + d.login);
-    var share = c[8].querySelector('.share');
+    var share = c.share.querySelector('.share');
     var stats = share.querySelectorAll('.stat');
     setCount(stats[0].querySelector('.num'), n.commits);
     if (boj) { txt(stats[1].querySelector('small'), 'boj'); setCount(stats[1].querySelector('.num'), boj.solved, '', '문제'); }
@@ -921,9 +963,16 @@ h1,p{margin:0}
 
   /* ---------- story ---------- */
   var allCards = cards.slice();
+  var K = {};
+  allCards.forEach(function (c) { K[c.getAttribute('data-key')] = c; });
   var fills = [];
-  function setupCards(skipBoj) {
-    cards = allCards.filter(function (c, i) { return !(skipBoj && i === 4); });
+  function setupCards(skipBoj, showRookie) {
+    cards = allCards.filter(function (c) {
+      var k = c.getAttribute('data-key');
+      if (k === 'boj' && skipBoj) return false;
+      if (k === 'rookie' && !showRookie) return false;
+      return true;
+    });
     allCards.forEach(function (c) { c.style.display = cards.indexOf(c) >= 0 ? '' : 'none'; });
     barsEl.innerHTML = '';
     cards.forEach(function () {
@@ -1104,7 +1153,7 @@ h1,p{margin:0}
     renderMatch(code);
     renderWanted(code);
     renderRPG(d, boj);
-    var share = allCards[8].querySelector('.share');
+    var share = K.share.querySelector('.share');
     share.querySelector('small').textContent = 'devti · ' + code;
     share.querySelector('.px').textContent = DEVTI[code][0];
   }
@@ -1165,6 +1214,7 @@ h1,p{margin:0}
   };
   var DEMO_BOJ_DATA = { solved: 213 };
   renderNew(DEMO_DATA, DEMO_BOJ_DATA);
+  document.getElementById('rkSprite').innerHTML = pixelSVG(ART.chick);
   var idx = 0, elapsed = 0, last = 0, paused = false, running = false, raf = null;
 
   function countUp(el) {
@@ -1307,6 +1357,100 @@ h1,p{margin:0}
       showScreen(loading, login);
       runLoading();
     }
+  });
+
+  /* ---------- 공유 카드 → PNG ---------- */
+  var H2C_URL = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+  function showToast(msg, ms) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('on'); }, ms || 2000);
+  }
+  function loadH2C() {
+    if (window.html2canvas) return Promise.resolve();
+    return new Promise(function (ok, fail) {
+      var sc = document.createElement('script');
+      sc.src = H2C_URL;
+      sc.onload = ok;
+      sc.onerror = function () { fail(new Error('html2canvas load failed')); };
+      document.head.appendChild(sc);
+    });
+  }
+  function buildExport() {
+    var root = document.createElement('div');
+    root.className = 'export is-active';
+    root.setAttribute('aria-hidden', 'true');
+    var top = document.createElement('div');
+    top.className = 'ex-top';
+    top.innerHTML = '<span>CODE_WRAPPED.2026</span><span>#DEVTI_' + MY_CODE + '</span>';
+    root.appendChild(top);
+    [K.share.querySelector('.share'), document.getElementById('wanted')].forEach(function (node) {
+      var cl = node.cloneNode(true);
+      cl.removeAttribute('id');
+      cl.querySelectorAll('[id]').forEach(function (x) { x.removeAttribute('id'); });
+      // 카운트업 중간 값이 찍히지 않게 최종 숫자로 고정
+      cl.querySelectorAll('[data-count]').forEach(function (x) {
+        x.textContent = (x.getAttribute('data-prefix') || '') + Number(x.getAttribute('data-count')).toLocaleString('ko-KR') + (x.getAttribute('data-suffix') || '');
+      });
+      root.appendChild(cl);
+    });
+    var foot = document.createElement('div');
+    foot.className = 'ex-foot';
+    foot.textContent = '나도 해 보기 →\ngithub.com/Aiden-Park11/Coding-Wrapped';
+    root.appendChild(foot);
+    document.body.appendChild(root);
+    return root;
+  }
+  function makePNG() {
+    var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    return fontsReady.then(loadH2C).then(function () {
+      var root = buildExport();
+      return window.html2canvas(root, { scale: 3, backgroundColor: null, logging: false, useCORS: true })
+        .then(function (cv) {
+          root.remove();
+          return new Promise(function (ok) { cv.toBlob(ok, 'image/png'); });
+        }, function (e) { root.remove(); throw e; });
+    });
+  }
+  function downloadBlob(blob) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'code-wrapped-2026-' + MY_CODE + '.png';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 3000);
+  }
+  function busy(btn, on, label) {
+    btn.disabled = on;
+    btn.querySelector('.lbl').textContent = label;
+  }
+  document.getElementById('saveImg').addEventListener('click', function () {
+    var btn = this;
+    busy(btn, true, '만드는 중…');
+    makePNG().then(function (blob) {
+      downloadBlob(blob);
+      showToast('> 이미지를 저장했어요');
+    }).catch(function () {
+      showToast('> 이미지 저장에 실패했어요. 인터넷 연결을 확인해 주세요', 2600);
+    }).then(function () { busy(btn, false, '이미지로 저장'); });
+  });
+  document.getElementById('shareImg').addEventListener('click', function () {
+    var btn = this;
+    busy(btn, true, '만드는 중…');
+    makePNG().then(function (blob) {
+      var file = new File([blob], 'code-wrapped-2026-' + MY_CODE + '.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        return navigator.share({ files: [file], title: '코딩 Wrapped 2026', text: '나의 개발자 유형은 ' + MY_CODE + ' ' + DEVTI[MY_CODE][0] + '!' })
+          .catch(function (e) { if (!e || e.name !== 'AbortError') throw e; });
+      }
+      downloadBlob(blob);
+      showToast('> 이 브라우저는 바로 공유가 안 돼서 이미지로 저장했어요', 2600);
+    }).catch(function () {
+      showToast('> 공유 이미지를 만들지 못했어요', 2400);
+    }).then(function () { busy(btn, false, '스토리로 공유'); });
   });
 
   document.getElementById('restart').addEventListener('click', function () {
