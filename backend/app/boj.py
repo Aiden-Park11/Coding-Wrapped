@@ -48,14 +48,28 @@ def _number(v):
     return None
 
 
+# v4 tagRatings 는 짧은 영어 키(impl, sim ...)로 와서 한글로 바꿔 줌
+KO_TAGS = {
+    "impl": "구현", "implementation": "구현", "math": "수학", "string": "문자열", "sim": "시뮬레이션",
+    "simulation": "시뮬레이션", "greedy": "그리디", "bfs": "BFS", "dfs": "DFS", "dp": "DP",
+    "graphs": "그래프", "graph_traversal": "그래프 탐색", "bruteforcing": "브루트포스", "sorting": "정렬",
+    "ds": "자료구조", "data_structures": "자료구조", "arithmetic": "사칙연산", "number_theory": "정수론",
+    "binary_search": "이분 탐색", "geometry": "기하", "trees": "트리", "combinatorics": "조합론",
+    "prefix_sum": "누적 합", "backtracking": "백트래킹", "dijkstra": "데이크스트라", "recursion": "재귀",
+    "stack": "스택", "queue": "큐", "hashing": "해싱", "two_pointer": "투 포인터", "bitmask": "비트마스킹",
+    "set": "집합", "priority_queue": "우선순위 큐", "case_work": "많은 조건 분기", "parsing": "파싱",
+}
+
+
 def _tag_name(tag) -> str:
     if isinstance(tag, str):
-        return tag
+        return KO_TAGS.get(tag, tag)
     if isinstance(tag, dict):
         for d in tag.get("displayNames", []) or []:
             if d.get("language") == "ko" and d.get("name"):
                 return d["name"]
-        return _first(tag, "name", "key", "slug") or "?"
+        key = _first(tag, "key", "name", "slug") or "?"
+        return KO_TAGS.get(key, key)
     return "?"
 
 
@@ -86,6 +100,7 @@ def parse_user(body) -> dict:
         "solved": _number(_first(u, "solvedCount", "solved_count", "solved")),
         "rating": _number(u.get("rating")),
         "top_tags": _top_tags(u),
+        "max_streak": _number(u.get("maxStreak")),
         "keys": sorted(u.keys())[:40],
     }
 
@@ -122,4 +137,6 @@ async def fetch_boj(handle: str, client: httpx.AsyncClient) -> dict:
     if out["solved"] is None:
         out["error"] = "unparsed"
         out["detail"] = "응답은 받았지만 해결 수 필드를 못 찾음 → keys 확인"
+    else:
+        out.pop("keys", None)   # 정상일 땐 디버깅용 키 목록 숨김
     return out

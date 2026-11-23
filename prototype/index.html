@@ -838,7 +838,7 @@ h1,p{margin:0}
       tier.appendChild(p);
       var s = document.createElement('span');
       s.className = 'mono'; s.style.fontWeight = '700';
-      s.textContent = boj.solved + ' solved' + (boj.rating ? ' · rating ' + boj.rating : '');
+      s.textContent = boj.solved + ' solved' + (boj.rating ? ' · rating ' + boj.rating : '') + (boj.max_streak ? ' · 최장 ' + boj.max_streak + '일 연속' : '');
       tier.appendChild(s);
       c[4].querySelector('.chart').style.display = 'none';
       var chips = c[4].querySelector('.chips');
