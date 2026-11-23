@@ -51,6 +51,7 @@ def test_compute_basic_numbers_and_messages():
     assert n["commits"] == 4 and n["repos"] == 1 and n["active_days"] == 2  # 3/1 17:30 UTC 는 한국 3/2
     assert n["longest_streak"] == 2
     assert n["main_language"] == {"name": "C", "percent": 90}
+    assert n["languages_count"] == 2
     assert n["commits_per_push"] == 2.0
     assert out["messages"]["top"][0] == {"message": "fix", "count": 2}
     assert out["messages"]["shortest"] == "ㅁ"

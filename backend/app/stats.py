@@ -150,6 +150,7 @@ def compute(raw: dict, today: date | None = None) -> dict:
             "daily_avg": round(total / elapsed, 1),
             "longest_streak": longest_streak(set(day_counts)),
             "main_language": main_lang,
+            "languages_count": len(lang_weight),
             "pushes": pushes,
             "force_pushes": force_pushes,
             "commits_per_push": commits_per_push,

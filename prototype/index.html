@@ -189,6 +189,80 @@ h1,p{margin:0}
   padding:10px 14px;font:13px var(--mono);opacity:0;transition:opacity .3s,transform .3s steps(3);z-index:30;white-space:nowrap;pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
+
+/* ---------- DEVTI ---------- */
+.dv-letters{display:flex;justify-content:space-between}
+.dv-letter{display:flex;flex-direction:column;align-items:center;gap:6px}
+.dv-letter b{width:68px;height:68px;display:flex;align-items:center;justify-content:center;background:var(--lime);color:var(--ink);
+  font-family:var(--px);font-size:42px;font-weight:700;box-shadow:4px 4px 0 var(--violet)}
+.dv-letter span{font:11px var(--mono);color:rgba(255,255,255,.7)}
+.dv-letter{opacity:0;transform:rotateX(90deg);transition:opacity .2s var(--d),transform .45s steps(5) var(--d)}
+.is-active .dv-letter,.is-leaving .dv-letter{opacity:1;transform:none}
+.card:not(.is-active):not(.is-leaving) .dv-letter{transition:none}
+.dv-hero{display:flex;align-items:center;gap:16px;padding:16px;background:var(--violet);box-shadow:6px 6px 0 var(--lime)}
+.dv-sprite{flex:none;width:84px}
+.dv-code{font-size:12px;font-weight:700;color:var(--lime)}
+.dv-name{margin:0;font-size:25px;line-height:1.3;color:#fff}
+.dv-desc{margin:0;font-size:14px;line-height:1.65;color:rgba(255,255,255,.88)}
+#dvTags .chip{background:transparent;border-color:#3A3A3A;color:var(--lime)}
+
+/* ---------- 궁합 ---------- */
+.mt{display:flex;flex-direction:column;gap:10px;padding:16px;background:var(--ink);box-shadow:6px 6px 0 var(--mc)}
+.mt-label{font:12px var(--mono);font-weight:700;color:var(--mc)}
+.mt-row{display:flex;align-items:center;gap:14px}
+.mt-row .pixel-svg{width:56px;flex:none}
+.mt-code{font:12px var(--mono);color:rgba(255,255,255,.65)}
+.mt-name{font-family:var(--px);font-size:20px;font-weight:700;color:#fff}
+.mt-why{margin:0;font-size:13px;line-height:1.55;color:rgba(255,255,255,.85)}
+.hearts{display:flex;gap:4px}
+.hearts i{width:16px;height:12px;background:rgba(255,255,255,.2)}
+.hearts i.on{background:var(--lime)}
+.mt-foot{display:flex;justify-content:space-between;align-items:center;font:11px var(--mono);color:rgba(255,255,255,.6)}
+
+/* ---------- RPG ---------- */
+.rpg-win{border:3px double #fff;background:#1B1B1B}
+.rpg-top{display:flex;gap:14px;padding:14px}
+.rpg-top .pixel-svg{width:76px}
+.rpg-ava{flex:none;padding:6px;background:var(--ink);border:2px solid #3A3A3A}
+.gauge{display:flex;align-items:center;gap:8px;font:11px var(--mono)}
+.gauge b{width:28px}
+.gauge .gb{flex:1;height:12px;border:2px solid #fff;padding:1px}
+.gauge .gb div{height:100%;width:0;transition:width .9s steps(10) var(--d,0ms)}
+.is-active .gauge .gb div,.is-leaving .gauge .gb div{width:var(--w)}
+.card:not(.is-active):not(.is-leaving) .gauge .gb div{transition:none}
+.gauge em{font-style:normal;width:58px;text-align:right}
+.stat-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px dashed #333}
+.stat-row:last-child{border-bottom:none}
+.stat-row span{font:13px var(--mono)}
+.stat-row span b{color:var(--lime)}
+.stat-row strong{font-family:var(--px);font-size:17px}
+.stat-row small{font:10px var(--mono);color:rgba(255,255,255,.55);margin-left:6px}
+.rpg-msg{padding:12px 16px;border:3px double #fff;background:var(--ink);font-family:var(--px);font-size:14px;line-height:1.6}
+
+/* ---------- DEVTI 목록 모달 ---------- */
+.dv-modal{position:absolute;inset:0;z-index:40;background:var(--ink);color:#fff;padding:22px 20px 24px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;
+  background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.2px);background-size:12px 12px;transition:opacity .25s,transform .3s steps(4)}
+.dv-modal[hidden]{display:flex;opacity:0;transform:translateY(24px);pointer-events:none;visibility:hidden}
+.dv-modal-head{display:flex;justify-content:space-between;align-items:center}
+.dv-close{width:44px;height:44px;border:2px solid #3A3A3A;background:var(--ink2);color:#fff;font-size:18px;cursor:pointer}
+.dv-legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 10px;font-size:11px;color:rgba(255,255,255,.7);padding:10px 12px;border:2px dashed #333}
+.dv-legend b{color:var(--lime)}
+.dv-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.dv-tile{position:relative;display:flex;align-items:center;gap:10px;padding:10px;min-height:64px;background:var(--ink2);border:2px solid #2E2E2E;color:#fff;
+  text-align:left;cursor:pointer;font-family:inherit;transition:transform .08s steps(2)}
+.dv-tile:hover{border-color:var(--lime)}
+.dv-tile:active{transform:translateY(2px)}
+.dv-tile .pixel-svg{width:34px;flex:none}
+.dv-tile b{display:block;font:12px var(--mono);font-weight:700;color:var(--lime)}
+.dv-tile span{display:block;font-family:var(--px);font-size:13px;line-height:1.35}
+.dv-tile.me{border-color:var(--lime);box-shadow:3px 3px 0 var(--violet)}
+.dv-tile.me::after{content:"YOU";position:absolute;top:-9px;right:6px;padding:1px 5px;background:var(--lime);color:var(--ink);font:10px var(--mono);font-weight:700}
+.dv-tile.sel{border-color:var(--violet);background:#241a5c}
+.dv-result{display:flex;flex-direction:column;gap:8px;padding:14px;background:var(--violet);box-shadow:4px 4px 0 var(--lime)}
+.dv-result[hidden]{display:none}
+.dv-result .px{font-size:17px}
+.dv-result p{margin:0;font-size:13px;line-height:1.55}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;transition-delay:0ms!important}
 }
@@ -328,22 +402,38 @@ h1,p{margin:0}
       </div>
     </article>
 
-    <!-- 5 코딩 유형 -->
+    <!-- 5 DEVTI: 개발자 MBTI -->
     <article class="card c-ink scan is-next" data-bars="light">
-      <div class="cmd"><span class="ps">$</span><span class="t">./classify --axes=4 --user=you</span></div>
-      <p class="a px" style="--d:300ms;font-size:17px;color:rgba(255,255,255,.8)">당신의 코딩 유형은…</p>
-      <div class="type-card a" style="--d:550ms">
-        <div class="crown" id="icoCrown"></div>
-        <span class="badge">N·B·L·S</span>
-        <h1 class="reveal px" style="--d:850ms;font-size:33px;line-height:1.3">야행성 몰아치기<br>솔로 리팩토러</h1>
-        <p class="a" style="--d:1600ms;font-size:14px;line-height:1.6;color:rgba(255,255,255,.9)">마감 이틀 전 새벽에 혼자 몰입해서,<br>한 번에 크게 갈아엎는 타입이에요.</p>
+      <div class="cmd"><span class="ps">$</span><span class="t">./devti --analyze --user=you</span></div>
+      <p class="a px" style="--d:300ms;font-size:17px;color:rgba(255,255,255,.8)">당신의 개발자 MBTI는…</p>
+      <div class="dv-letters" id="dvLetters"></div>
+      <div class="dv-hero a" style="--d:1050ms">
+        <div class="dv-sprite" id="dvSprite"></div>
+        <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+          <span class="mono dv-code" id="dvCode"></span>
+          <h1 class="px dv-name" id="dvName"></h1>
+        </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="axis a" style="--d:1700ms"><div class="axis-top"><span>morning</span><b>night 78%</b></div><div class="trk"><div class="fill lime" style="--w:78%;--d:1800ms"></div></div></div>
-        <div class="axis a" style="--d:1800ms"><div class="axis-top"><span>steady</span><b>burst 64%</b></div><div class="trk"><div class="fill lime" style="--w:64%;--d:1900ms"></div></div></div>
-        <div class="axis a" style="--d:1900ms"><div class="axis-top"><span>small_commit</span><b>large 71%</b></div><div class="trk"><div class="fill lime" style="--w:71%;--d:2000ms"></div></div></div>
-        <div class="axis a" style="--d:2000ms"><div class="axis-top"><span>team</span><b>solo 83%</b></div><div class="trk"><div class="fill lime" style="--w:83%;--d:2100ms"></div></div></div>
-      </div>
+      <p class="a dv-desc" style="--d:1250ms" id="dvDesc"></p>
+      <div class="chips a" style="--d:1400ms" id="dvTags"></div>
+      <div class="spacer"></div>
+      <button class="btn btn-lime notch a" style="--d:1500ms" type="button" id="dvListBtn">▦ DEVTI 16유형 전체 보기</button>
+    </article>
+
+    <!-- 6 팀플 궁합 -->
+    <article class="card c-violet is-next" data-bars="light">
+      <div class="cmd"><span class="ps">$</span><span class="t">./devti --match --team</span></div>
+      <h1 class="title a" style="--d:300ms">팀플 궁합,<br>미리 알아봤어요</h1>
+      <div class="a" style="--d:450ms" id="mtBest"></div>
+      <div class="a" style="--d:700ms" id="mtBad"></div>
+      <div class="spacer"></div>
+      <button class="btn btn-lime notch a" style="--d:900ms" type="button" id="mtBtn">친구 유형 골라서 궁합 보기 →</button>
+    </article>
+
+    <!-- 7 RPG 스탯창 -->
+    <article class="card c-ink scan is-next" data-bars="light">
+      <div class="cmd"><span class="ps">$</span><span class="t">cat ~/.profile --rpg</span></div>
+      <div id="rpg" style="display:flex;flex-direction:column;gap:14px;flex:1"></div>
     </article>
 
     <!-- 6 공유 -->
@@ -376,6 +466,20 @@ h1,p{margin:0}
   </section>
 
   <div class="toast" id="toast" role="status"></div>
+  <div class="dv-modal" id="dvModal" role="dialog" aria-modal="true" aria-labelledby="dvModalTitle" hidden>
+    <div class="dv-modal-head">
+      <span class="mono" style="color:var(--lime);font-size:12px;font-weight:700">$ devti --list</span>
+      <button type="button" class="dv-close" id="dvClose" aria-label="목록 닫기">✕</button>
+    </div>
+    <h2 class="px" id="dvModalTitle" style="margin:0;font-size:26px">DEVTI 16유형</h2>
+    <p class="sub" id="dvModalSub" style="margin:0;font-size:13px;color:rgba(255,255,255,.75)"></p>
+    <div class="dv-legend mono">
+      <span><b>O</b> 올빼미 · <b>L</b> 종달새</span><span><b>B</b> 몰아치기 · <b>S</b> 꾸준</span>
+      <span><b>I</b> 인디 · <b>T</b> 팀</span><span><b>R</b> 리팩터 · <b>C</b> 컴팩트</span>
+    </div>
+    <div class="dv-result" id="dvResult" hidden></div>
+    <div class="dv-grid" id="dvGrid"></div>
+  </div>
 </div>
 
 <p class="hint">tap · swipe · ← → 로 넘기기 · 꾹 누르면 일시정지 · 숫자는 모두 예시</p>
@@ -393,14 +497,18 @@ h1,p{margin:0}
   var CARD_MS = 7000;
 
   /* ---------- pixel sprites ---------- */
-  var PAL = { l: '#D4FF3A', k: '#111111', d: '#A6CC24', b: '#D4FF3A', c: 'currentColor' };
+  var PAL = { l: '#D4FF3A', k: '#111111', d: '#A6CC24', b: '#D4FF3A', c: 'currentColor', v: '#5B3DE8', D: '#3A27A8', w: '#FFFFFF', o: '#F2A23A', s: '#F0C9A0' };
   var ART = {
     monitor: ['llllllllllllllll','lkkkkkkkkkkkkkkl','lkkkkkkkkkkkkkkl','lkklkkkkkkkkkkkl','lkkklkkkkkkkkkkl','lkkkklkkkkkkkkkl','lkkklkkkkkkkkkkl','lkklkkkbbbbkkkkl','lkkkkkkkkkkkkkkl','lkkkkkkkkkkkkkkl','llllllllllllllll','......llll......','....llllllll....'],
     moon: ['...llll...','..lll.....','.lll......','.ll.......','.ll.......','.lll......','..llll..l.','...lllll..','....lll...','..........'],
     crown: ['l.....l.....l','ll...lll...ll','lll.lllll.lll','lllllllllllll','llklllklllkll','lllllllllllll','ddddddddddddd'],
     floppy: ['ccccccccccc.','c..ccccc..cc','c..ccccc..cc','c..ccccc..cc','c.........cc','c.........cc','c.cccccccc.c','c.c......c.c','c.c......c.c','c.c......c.c','cccccccccccc'],
     share: ['.....cc.....','....cccc....','...cccccc...','.....cc.....','.....cc.....','.....cc.....','cc...cc...cc','cc........cc','cc........cc','cc........cc','cccccccccccc'],
-    branch: ['.cc......cc.','.cc......cc.','.cc......cc.','.cc.......c.','.cc......c..','.cc....cc...','.cccccc.....','.cc.........','.cc.........','.cc.........','.cc.........']
+    branch: ['.cc......cc.','.cc......cc.','.cc......cc.','.cc.......c.','.cc......c..','.cc....cc...','.cccccc.....','.cc.........','.cc.........','.cc.........','.cc.........'],
+    owl: ['................','..v..........v..','..vv........vv..','..vvvvvvvvvvvv..','.vvvvvvvvvvvvvv.','.vwwwwvvvvwwwwv.','.vwwkwvvvvwkwwv.','.vwkkwvvvvwkkwv.','.vwwwwvoovwwwwv.','.vvvvvvoovvvvvv.','.vvllllllllllvv.','.vvlvlvllvlvlvv.','.vvllllllllllvv.','..vvvvvvvvvvvv..','...oo......oo...','................'],
+    chick: ['....llll....','...llllll...','..llkllllll.','..lllllllloo','..llllllll..','.lllllllll..','lllwwwllll..','llwwwwwlll..','.llwwwlll...','..lllll.....','...o..o.....','..oo.oo.....'],
+    ghost: ['...wwwwww...','..wwwwwwww..','.wwwwwwwwww.','.wwkkwwkkww.','.wwkkwwkkww.','.wwwwwwwwww.','.wwwwkkwwww.','.wwwwwwwwww.','.wwwwwwwwww.','.wwwwwwwwww.','.ww.ww.ww.w.','.w..w..w....'],
+    wiz: ['......vv........','.....vvvv.......','....vvlvvv......','...vvvvvvvv.....','..vvvvvvvvvv..l.','.DDDDDDDDDDDD.l.','...ssssssss...l.','...skssssks...l.','...ssssssss...l.','...wwwwwwww..sl.','..vvwwwwwwvvvsl.','..vvvwwwwvvv..l.','..vvvvvvvvvv..l.','..vvvvvvvvvv..l.','..DDDDDDDDDD..l.','...DD....DD.....']
   };
   function pixelSVG(rows, blinkChar) {
     var h = rows.length, w = rows[0].length, a = '', b = '';
@@ -421,7 +529,6 @@ h1,p{margin:0}
   }
   document.getElementById('monitor').innerHTML = pixelSVG(ART.monitor, 'b');
   document.getElementById('icoMoon').innerHTML = pixelSVG(ART.moon);
-  document.getElementById('icoCrown').innerHTML = pixelSVG(ART.crown);
   document.getElementById('icoBranch').innerHTML = pixelSVG(ART.branch);
   document.querySelectorAll('[data-ico]').forEach(function (el) { el.innerHTML = pixelSVG(ART[el.getAttribute('data-ico')]); });
   document.querySelectorAll('.btn .pixel-svg').forEach(function (s) { s.style.width = '20px'; });
@@ -737,22 +844,12 @@ h1,p{margin:0}
       var last = c[4].querySelector('.a:last-of-type');
       if (last && last.textContent.indexOf('longest_struggle') >= 0) last.style.display = 'none';
     }
-    // 5 type
+    // 5~7 DEVTI · 궁합 · RPG
+    renderNew(d, boj);
     var t = d.type;
-    txt(c[5].querySelector('.badge'), t.code);
-    txt(c[5].querySelector('h1.reveal'), t.name);
-    txt(c[5].querySelector('.type-card p'), t.description);
-    c[5].querySelectorAll('.axis').forEach(function (row, i) {
-      var ax = t.axes[i]; if (!ax) return;
-      var right = ax.score >= 0.5, pct = Math.round(100 * (right ? ax.score : 1 - ax.score));
-      txt(row.querySelector('.axis-top span'), right ? ax.left : ax.right);
-      txt(row.querySelector('.axis-top b'), (right ? ax.right : ax.left) + ' ' + pct + '%');
-      row.querySelector('.fill').style.setProperty('--w', pct + '%');
-    });
-    // 6 share
+    // 8 share
     txt(document.getElementById('handle'), '@' + d.login);
-    var share = c[6].querySelector('.share');
-    txt(share.querySelector('.px'), t.name);
+    var share = c[8].querySelector('.share');
     var stats = share.querySelectorAll('.stat');
     setCount(stats[0].querySelector('.num'), n.commits);
     if (boj) { txt(stats[1].querySelector('small'), 'boj'); setCount(stats[1].querySelector('.num'), boj.solved, '', '문제'); }
@@ -783,6 +880,204 @@ h1,p{margin:0}
     fills = barsEl.querySelectorAll('span');
   }
   setupCards(false);
+  /* ---------- DEVTI · 궁합 · RPG ---------- */
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
+    });
+  }
+  var LETTER_LABEL = { O: '올빼미', L: '종달새', B: '몰아치기', S: '꾸준', I: '인디', T: '팀', R: '리팩터', C: '컴팩트' };
+  var LETTER_TAG = { O: '#새벽코딩', L: '#아침형개발자', B: '#마감직전각성', S: '#매일조금씩', I: '#혼자가편해', T: '#팀플장인', R: '#대공사전문', C: '#커밋은작게' };
+  var DEVTI = {
+    OBIR: ['새벽의 폭주기관차', '모두가 잠든 새벽, 마감 직전에야 엔진이 걸려요. 한 번 달리면 아무도 못 말리고 코드를 통째로 갈아엎어요.'],
+    OBIC: ['새벽의 스나이퍼', '새벽에 몰아서 작업하지만 커밋은 한 발 한 발 정확해요. 마감 전날 밤의 조용한 저격수.'],
+    OBTR: ['야간 특공대장', '팀원들이 잠든 사이 밤새 대공사를 끝내 놓는 타입. 아침에 PR 보고 다들 놀라요.'],
+    OBTC: ['야간 작전 참모', '밤에 팀원들과 몰아서 작업하면서도 커밋은 깔끔하게 나누는 전략가예요.'],
+    OSIR: ['올빼미 건축가', '매일 밤 조금씩, 그러다 가끔 구조를 통째로 갈아엎는 혼자만의 설계자.'],
+    OSIC: ['올빼미 장인', '밤마다 꾸준히, 작고 정갈한 커밋을 쌓는 장인 정신의 소유자.'],
+    OSTR: ['밤샘 팀장', '밤이면 어김없이 접속해서 팀 레포를 크게크게 밀고 나가는 리더형.'],
+    OSTC: ['심야 수호자', '밤마다 팀 레포를 지키며 작은 수정으로 버그를 막아내는 든든한 수호자.'],
+    LBIR: ['벼락치기 얼리버드', '아침형인데 마감 직전에 몰아치는 반전 매력. 한 번에 크게 뜯어고쳐요.'],
+    LBIC: ['얼리버드 스나이퍼', '아침에 몰아서 집중하고, 커밋은 작고 정확하게 끊어 쳐요.'],
+    LBTR: ['아침 돌격대장', '아침부터 팀을 이끌고 돌격! 마감 직전 대규모 작업의 선봉장.'],
+    LBTC: ['아침 회의 MVP', '아침에 팀원들과 몰아서 달리면서 할 일을 잘게 쪼개 처리하는 해결사.'],
+    LSIR: ['아침의 건축가', '해가 떠 있을 때 꾸준히 혼자 설계하고, 필요하면 과감하게 리팩터링해요.'],
+    LSIC: ['정리정돈 장인', '매일 아침 조금씩, 작고 깔끔한 커밋을 남기는 교과서 같은 개발자.'],
+    LSTR: ['팀의 리모델러', '낮에 꾸준히 팀과 함께 움직이고, 구조가 마음에 안 들면 크게 고쳐 놓아요.'],
+    LSTC: ['아침의 정리왕', '해 뜰 때 출근해서 팀 레포를 작은 커밋으로 반질반질하게 정리해요.']
+  };
+  var MATCH_TEXT = [
+    '똑같은 유형! 같은 시간에 같은 방식으로 달려서 force push 충돌 주의.',
+    '거의 쌍둥이. 편하긴 하지만 서로의 빈틈을 메워 주진 못해요.',
+    '적당히 비슷하고 적당히 달라서 무난하게 굴러가는 조합.',
+    '다른 점이 많아서 서로 배울 게 많은 조합이에요.',
+    '정반대라 완벽하게 보완해 주는 찰떡 조합! 한 명이 벌이면 한 명이 정리해요.'
+  ];
+  function devtiOf(axes) {
+    function sc(i) { var a = axes[i]; return typeof a === 'number' ? a : a.score; }
+    return (sc(0) >= 0.5 ? 'O' : 'L') + (sc(1) >= 0.5 ? 'B' : 'S') + (sc(2) >= 0.5 ? 'I' : 'T') + (sc(3) >= 0.5 ? 'R' : 'C');
+  }
+  function opposite(code) {
+    var flip = { O: 'L', L: 'O', B: 'S', S: 'B', I: 'T', T: 'I', R: 'C', C: 'R' };
+    return code.split('').map(function (ch) { return flip[ch]; }).join('');
+  }
+  function diffCount(a, b) { var n = 0; for (var i = 0; i < 4; i++) if (a[i] !== b[i]) n++; return n; }
+  function spriteFor(code) { return pixelSVG(code[0] === 'O' ? ART.owl : ART.chick); }
+  function hearts(n) {
+    var h = '';
+    for (var i = 0; i < 5; i++) h += '<i class="' + (i < n ? 'on' : '') + '"></i>';
+    return '<div class="hearts" role="img" aria-label="궁합 ' + n + '점 / 5점">' + h + '</div>';
+  }
+  var MY_CODE = 'OBIR';
+
+  function renderDevti(code) {
+    MY_CODE = code;
+    var box = document.getElementById('dvLetters');
+    box.innerHTML = code.split('').map(function (ch, i) {
+      return '<div class="dv-letter" style="--d:' + (500 + i * 150) + 'ms"><b>' + ch + '</b><span>' + LETTER_LABEL[ch] + '</span></div>';
+    }).join('');
+    document.getElementById('dvSprite').innerHTML = spriteFor(code);
+    document.getElementById('dvCode').textContent = 'TYPE · ' + code;
+    document.getElementById('dvName').textContent = DEVTI[code][0];
+    document.getElementById('dvDesc').textContent = DEVTI[code][1];
+    document.getElementById('dvTags').innerHTML = code.split('').slice(0, 3).map(function (ch) {
+      return '<span class="chip">' + LETTER_TAG[ch] + '</span>';
+    }).join('');
+  }
+
+  function matchCard(label, color, code, why, score, sprite) {
+    return '<div class="mt" style="--mc:' + color + '">' +
+      '<span class="mt-label">' + label + '</span>' +
+      '<div class="mt-row">' + sprite + '<div><div class="mt-code">' + code + '</div><div class="mt-name">' + DEVTI[code][0] + '</div></div></div>' +
+      '<p class="mt-why">' + why + '</p>' +
+      '<div class="mt-foot"><span>compatibility</span>' + hearts(score) + '</div></div>';
+  }
+  function renderMatch(code) {
+    var best = opposite(code);
+    document.getElementById('mtBest').innerHTML = matchCard('♥ BEST MATCH', 'var(--lime)', best,
+      '당신이 ' + (code[0] === 'O' ? '새벽에' : '낮에') + ' 벌여 놓은 코드를, ' + (best[0] === 'O' ? '밤에' : '다음 날 아침') + ' ' +
+      (best[3] === 'C' ? '작은 커밋으로 깔끔하게 정리' : '과감하게 리팩터링') + '해 줘요.', 5, spriteFor(best));
+    document.getElementById('mtBad').innerHTML = matchCard('✕ DANGER', '#F2A23A', code, MATCH_TEXT[0], 1, pixelSVG(ART.ghost));
+  }
+
+  var CLASS_BY_LANG = {
+    TypeScript: 'TypeScript 마법사', JavaScript: 'JavaScript 마법사', Python: 'Python 연금술사', C: 'C 기사',
+    'C++': 'C++ 기사단장', Java: 'Java 성기사', 'C#': 'C# 소환사', Kotlin: 'Kotlin 레인저', Swift: 'Swift 궁수',
+    Go: 'Go 닌자', Rust: 'Rust 대장장이', HTML: 'HTML 음유시인', CSS: 'CSS 화가', Dart: 'Dart 창술사'
+  };
+  function gauge(label, v, mx, color, delay, text) {
+    var pct = mx > 0 ? Math.max(2, Math.min(100, Math.round(100 * v / mx))) : 0;
+    return '<div class="gauge"><b>' + label + '</b><div class="gb"><div style="--w:' + pct + '%;--d:' + delay + 'ms;background:repeating-linear-gradient(90deg,' + color + ' 0 6px,transparent 6px 8px)"></div></div><em>' + text + '</em></div>';
+  }
+  function statRow(k, label, val, note, count, suffix) {
+    var v = count != null ? '<strong data-count="' + count + '" data-suffix="' + (suffix || '') + '" data-delay="700">0</strong>' : '<strong>' + val + '</strong>';
+    return '<div class="stat-row"><span><b>' + k + '</b> ' + label + '</span><span>' + v + '<small>' + note + '</small></span></div>';
+  }
+  function renderRPG(d, boj) {
+    var n = d.numbers;
+    var solved = boj && boj.solved ? boj.solved : 0;
+    var pts = n.commits * 2 + solved + n.active_days;
+    var lv = Math.floor(Math.sqrt(pts)) + 1;
+    var lo = (lv - 1) * (lv - 1), hi = lv * lv;
+    var need = Math.max(1, Math.ceil((hi - pts) / 2));
+    var start = new Date(new Date().getFullYear(), 0, 1);
+    var doy = Math.min(366, Math.floor((Date.now() - start) / 86400000) + 1);
+    var lang = n.main_language ? n.main_language.name : null;
+    var cls = lang ? (CLASS_BY_LANG[lang] || lang + ' 모험가') : '코드 모험가';
+    var team = Math.round(100 * (1 - (typeof d.type.axes[2] === 'number' ? d.type.axes[2] : d.type.axes[2].score)));
+    var skills = [];
+    var mr = d.messages && d.messages.most_rewritten;
+    if (mr) skills.push(esc(mr.file) + ' 강화 +' + mr.count);
+    if (d.time.peak_hour != null) skills.push(d.time.peak_hour + '시 집중 모드');
+    if (d.time.night_share_0_4 >= 20) skills.push('새벽 각성');
+    document.getElementById('rpg').innerHTML =
+      '<div class="rpg-win rpg-top a" style="--d:300ms"><div class="rpg-ava">' + pixelSVG(ART.wiz) + '</div>' +
+      '<div style="display:flex;flex-direction:column;gap:6px;min-width:0">' +
+      '<span class="mono" style="font-size:12px;color:rgba(255,255,255,.7)">@' + esc(d.login) + '</span>' +
+      '<span class="px" style="font-size:19px;color:var(--lime)">' + esc(cls) + '</span>' +
+      '<span class="px" style="font-size:15px">Lv. ' + lv + '</span></div></div>' +
+      '<div class="a" style="--d:450ms;display:flex;flex-direction:column;gap:8px">' +
+      gauge('HP', n.active_days, doy, '#E85D4A', 600, n.active_days + '/' + doy) +
+      gauge('MP', n.longest_streak, Math.max(30, n.longest_streak), '#7FA7FF', 700, n.longest_streak + '/' + Math.max(30, n.longest_streak)) +
+      gauge('EXP', pts - lo, hi - lo, '#D4FF3A', 800, Math.round(100 * (pts - lo) / (hi - lo)) + '%') + '</div>' +
+      '<div class="rpg-win a" style="--d:650ms;padding:4px 16px 8px">' +
+      statRow('STR', '커밋력', null, '커밋', n.commits) +
+      statRow('INT', '알고리즘', solved ? null : '-', solved ? '백준' : '백준 미연결', solved || null) +
+      statRow('DEX', '손재주', n.languages_count == null ? '-' : null, '언어', n.languages_count) +
+      statRow('VIT', '지구력', null, '연속 커밋', n.longest_streak, '일') +
+      statRow('LUK', '운', n.force_pushes == null ? '?' : null, 'force push', n.force_pushes) +
+      statRow('CHA', '협동심', null, '팀 레포', team, '%') + '</div>' +
+      '<div class="a mono" style="--d:850ms;display:flex;flex-direction:column;gap:4px;font-size:12px;color:rgba(255,255,255,.85)">' +
+      skills.slice(0, 2).map(function (s) { return '<span><b style="color:var(--lime)">SKILL</b> ▶ ' + s + '</span>'; }).join('') + '</div>' +
+      '<div class="spacer"></div>' +
+      '<div class="rpg-msg a" style="--d:1000ms">레벨업까지 커밋 ' + need + '개 남았어요!<br><span class="blinky" style="color:var(--lime)">▼</span></div>';
+  }
+
+  function renderNew(d, boj) {
+    var code = devtiOf(d.type.axes);
+    renderDevti(code);
+    renderMatch(code);
+    renderRPG(d, boj);
+    var share = allCards[8].querySelector('.share');
+    share.querySelector('small').textContent = 'devti · ' + code;
+    share.querySelector('.px').textContent = DEVTI[code][0];
+  }
+
+  /* 16유형 목록 모달: 목록 보기 / 친구 궁합 고르기 */
+  var dvModal = document.getElementById('dvModal');
+  var modalMode = 'list', wasPaused = false;
+  function openModal(mode) {
+    modalMode = mode;
+    wasPaused = paused;
+    setPaused(true);
+    pauseBadge.classList.remove('on');
+    document.getElementById('dvModalSub').textContent = mode === 'match'
+      ? '친구의 유형을 고르면 ' + MY_CODE + '와의 궁합을 알려줘요.'
+      : '유형을 누르면 설명을 볼 수 있어요. 내 유형은 ' + MY_CODE + '예요.';
+    document.getElementById('dvResult').hidden = true;
+    var grid = document.getElementById('dvGrid');
+    grid.innerHTML = Object.keys(DEVTI).map(function (c) {
+      return '<button type="button" class="dv-tile' + (c === MY_CODE ? ' me' : '') + '" data-code="' + c + '">' +
+        spriteFor(c) + '<div><b>' + c + '</b><span>' + DEVTI[c][0] + '</span></div></button>';
+    }).join('');
+    dvModal.hidden = false;
+    dvModal.scrollTop = 0;
+    document.getElementById('dvClose').focus();
+  }
+  function closeModal() {
+    dvModal.hidden = true;
+    setPaused(wasPaused);
+  }
+  document.getElementById('dvGrid').addEventListener('click', function (e) {
+    var t = e.target.closest('.dv-tile');
+    if (!t) return;
+    var c = t.getAttribute('data-code');
+    document.querySelectorAll('.dv-tile.sel').forEach(function (x) { x.classList.remove('sel'); });
+    t.classList.add('sel');
+    var r = document.getElementById('dvResult');
+    if (modalMode === 'match') {
+      var dc = diffCount(MY_CODE, c);
+      r.innerHTML = '<span class="px">' + MY_CODE + ' × ' + c + '</span>' + hearts(dc + 1) + '<p>' + MATCH_TEXT[dc] + '</p>';
+    } else {
+      r.innerHTML = '<span class="px">' + c + ' · ' + DEVTI[c][0] + '</span><p>' + DEVTI[c][1] + '</p>';
+    }
+    r.hidden = false;
+    r.scrollIntoView({ block: 'nearest' });
+  });
+  document.getElementById('dvClose').addEventListener('click', closeModal);
+  document.getElementById('dvListBtn').addEventListener('click', function () { openModal('list'); });
+  document.getElementById('mtBtn').addEventListener('click', function () { openModal('match'); });
+
+  // 데모 데이터 (백엔드 /api/demo 와 같은 숫자)
+  var DEMO_DATA = {
+    login: 'demo-user',
+    numbers: { commits: 1284, repos: 14, active_days: 201, longest_streak: 23, main_language: { name: 'C', percent: 62 }, languages_count: 4, force_pushes: 7 },
+    time: { peak_hour: 2, night_share_0_4: 38 },
+    messages: { most_rewritten: { file: 'main.c', count: 97 } },
+    type: { axes: [0.78, 0.64, 0.83, 0.71] }
+  };
+  var DEMO_BOJ_DATA = { solved: 213 };
+  renderNew(DEMO_DATA, DEMO_BOJ_DATA);
   var idx = 0, elapsed = 0, last = 0, paused = false, running = false, raf = null;
 
   function countUp(el) {
@@ -892,6 +1187,7 @@ h1,p{margin:0}
   });
 
   document.addEventListener('keydown', function (e) {
+    if (!dvModal.hidden) { if (e.key === 'Escape') closeModal(); return; }
     if (!running || story.classList.contains('hidden')) return;
     if (e.key === 'ArrowRight') show(idx + 1, 1);
     if (e.key === 'ArrowLeft') show(idx - 1, -1);

@@ -30,7 +30,7 @@ DEMO_WRAPPED = {
     "demo": True,
     "numbers": {
         "commits": 1284, "repos": 14, "active_days": 201, "daily_avg": 3.9, "longest_streak": 23,
-        "main_language": {"name": "C", "percent": 62},
+        "main_language": {"name": "C", "percent": 62}, "languages_count": 4,
         "pushes": 312, "force_pushes": 7, "commits_per_push": 4.1,
     },
     "time": {
