@@ -57,3 +57,9 @@ DEMO_WRAPPED = {
         ],
     },
 }
+
+DEMO_BOJ = {
+    "handle": "demo", "tier": "Silver I", "solved": 213, "rating": 1021,
+    "top_tags": [{"tag": "구현", "solved": 64}, {"tag": "그리디 알고리즘", "solved": 31},
+                 {"tag": "수학", "solved": 28}, {"tag": "너비 우선 탐색", "solved": 17}],
+}

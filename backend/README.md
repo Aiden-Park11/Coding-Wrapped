@@ -54,6 +54,7 @@ cd ~/Documents/Coding-Wrapped
 | `GET /auth/callback` | GitHub 가 돌려보내는 주소. `state`·설치 정보 검증 후 분석 시작 |
 | `GET /api/wrapped` | 분석 결과. `status`: `pending` → `done` / `error` (1초마다 폴링) |
 | `GET /api/demo` | 데모 데이터 (발표용, 로그인 불필요) |
+| `GET /api/boj?handle=아이디` | 백준 티어·해결 수·많이 푼 유형 (solved.ac 공식 API v4, 앱 키 필요) |
 | `POST /auth/logout` | 세션 삭제 |
 | `GET /health` | 서버 상태 (잠자기 방지 핑용) |
 
@@ -91,4 +92,4 @@ python -m pytest -q
 - [ ] Activity API 에 올해 1월 기록까지 남아 있는지
 - [x] 프론트(prototype)에 `/api/wrapped` 연결
 
-> 백준(solved.ac) 연동은 보류: solved.ac 가 외부 요청을 막고 있어 공식 협의 후 다시 추가 예정
+> 백준: solved.ac 공식 API v4 사용. Backstage 에서 발급한 앱 키를 `.env` 의 `SOLVEDAC_CLIENT_ID` / `SOLVEDAC_CLIENT_SECRET` 에 넣으면 켜짐 (v3 는 지원 종료 예정)

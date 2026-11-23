@@ -10,6 +10,10 @@ APP_SLUG = os.getenv("GH_APP_SLUG", "")            # 예: knu-code-wrapped
 CLIENT_ID = os.getenv("GH_CLIENT_ID", "")
 CLIENT_SECRET = os.getenv("GH_CLIENT_SECRET", "")
 
+# solved.ac 공식 API v4 앱 키 (solved.ac Backstage 에서 발급, 모든 요청에 필요)
+SOLVEDAC_CLIENT_ID = os.getenv("SOLVEDAC_CLIENT_ID", "")
+SOLVEDAC_CLIENT_SECRET = os.getenv("SOLVEDAC_CLIENT_SECRET", "")
+
 # 이 서버의 공개 주소 (콜백 URL = BASE_URL + /auth/callback)
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8000").rstrip("/")
 
