@@ -4,7 +4,10 @@
 프론트(prototype/)도 이 서버가 같이 서빙해서 쿠키·CORS 문제를 없앤다.
 """
 import asyncio
+import base64
+import hashlib
 import logging
+import re
 import secrets
 from contextlib import asynccontextmanager
 import time
@@ -31,7 +34,50 @@ async def lifespan(_app):
     await client.aclose()
 
 
-app = FastAPI(title="Coding Wrapped", lifespan=lifespan)
+app = FastAPI(title="Coding Wrapped", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
+
+FRONT = Path(__file__).resolve().parents[2] / "prototype"
+
+
+def _inline_script_hashes() -> list[str]:
+    """index.html 의 인라인 스크립트만 CSP 로 허용 (그 외 주입된 스크립트는 실행 안 됨)"""
+    page = FRONT / "index.html"
+    if not page.exists():
+        return []
+    html = page.read_text(encoding="utf-8")
+    return ["'sha256-" + base64.b64encode(hashlib.sha256(m.encode("utf-8")).digest()).decode() + "'"
+            for m in re.findall(r"<script>(.*?)</script>", html, flags=re.S)]
+
+
+CSP = "; ".join([
+    "default-src 'self'",
+    "script-src 'self' " + " ".join(_inline_script_hashes()),
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com data:",
+    "img-src 'self' data: blob:",
+    "connect-src 'self'",
+    "object-src 'none'",
+    "base-uri 'none'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+])
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    resp = await call_next(request)
+    h = resp.headers
+    if config.COOKIE_SECURE:
+        h["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    h["Content-Security-Policy"] = CSP
+    h["X-Content-Type-Options"] = "nosniff"
+    h["X-Frame-Options"] = "DENY"
+    h["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    h["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(), payment=()"
+    h["Cross-Origin-Opener-Policy"] = "same-origin"
+    if request.url.path.startswith(("/api/", "/auth/")):
+        h["Cache-Control"] = "no-store"
+    return resp
 
 # 해커톤 규모라 메모리에 보관. 토큰은 저장하지 않고 분석 결과만 남긴다.
 SESSIONS: dict[str, dict] = {}
@@ -87,7 +133,9 @@ async def auth_callback(request: Request, code: str | None = None, state: str | 
                         installation_id: int | None = None):
     expected = request.cookies.get(STATE_COOKIE)
     if not code or not state or not expected or not secrets.compare_digest(state, expected):
-        raise HTTPException(400, "로그인 요청이 올바르지 않아요. 처음부터 다시 시도해 주세요.")
+        # 위조 요청이거나, 카톡 같은 앱 안 브라우저에서 시작해 다른 브라우저로 돌아온 경우.
+        # 어느 쪽이든 진행하지 않고 처음 화면에서 안내한다.
+        return RedirectResponse("/?error=state")
 
     try:
         token = await exchange_code(code, client)
@@ -186,6 +234,5 @@ async def boj(request: Request, handle: str):
 
 
 # ---------- 프론트 ----------
-FRONT = Path(__file__).resolve().parents[2] / "prototype"
 if FRONT.exists():
     app.mount("/", StaticFiles(directory=FRONT, html=True), name="front")
