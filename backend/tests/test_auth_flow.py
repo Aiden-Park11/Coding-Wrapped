@@ -103,3 +103,23 @@ def test_boj_requires_session_and_hides_debug(monkeypatch):
     # 세션당 1분 5회 제한
     codes = [c.get("/api/boj", params={"handle": "joon_2026"}).status_code for _ in range(5)]
     assert codes[-1] == 429
+
+
+def test_login_shortcut_and_missing_install(monkeypatch):
+    """'바로 로그인' → 승인 화면, 설치가 없으면 설치 화면으로 이어서 보냄"""
+    c = _setup(monkeypatch)
+    r = c.get("/auth/start", params={"login": "1"})
+    assert r.headers["location"].startswith("https://github.com/login/oauth/authorize?")
+
+    def no_install(req: httpx.Request) -> httpx.Response:
+        if req.url.path == "/user/installations":
+            return httpx.Response(200, json={"installations": []})
+        return gh_handler(req)
+
+    monkeypatch.setattr(main, "client", httpx.AsyncClient(transport=httpx.MockTransport(no_install)))
+    state = c.cookies.get("cw_state")
+    r = c.get("/auth/callback", params={"code": "abc", "state": state})
+    assert r.status_code == 307
+    assert r.headers["location"].startswith("https://github.com/apps/knu-code-wrapped/installations/new?state=")
+    new_state = c.cookies.get("cw_state")
+    assert new_state and new_state != state and new_state in r.headers["location"]

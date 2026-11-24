@@ -310,6 +310,7 @@ h1,p{margin:0}
       <span>코드는 읽지 않고, <b>읽기 권한</b>만 받아요.</span>
     </div>
     <button class="btn btn-lime notch" id="startBtn" type="button"><span id="icoBranch"></span>GitHub로 시작하기</button>
+    <button class="linkbtn" id="loginBtn" type="button" hidden style="color:var(--lime);height:32px;margin-top:-4px;font-size:13px">$ 전에 설치했다면 → 바로 로그인</button>
     <button class="linkbtn" id="demoBtn" type="button" style="color:rgba(255,255,255,.7);height:36px;margin-top:-6px">$ 로그인 없이 데모로 보기</button>
   </section>
 
@@ -762,6 +763,9 @@ h1,p{margin:0}
     MODE = 'demo';
     showScreen(loading, login);
     runLoading();
+  });
+  document.getElementById('loginBtn').addEventListener('click', function () {
+    if (BACKEND) { location.href = '/auth/start?login=1'; }
   });
   document.getElementById('demoBtn').addEventListener('click', function () {
     MODE = 'demo';
@@ -1345,6 +1349,7 @@ h1,p{margin:0}
   /* ---------- 시작: 백엔드 확인 + 로그인 후 돌아온 경우 ---------- */
   hasBackend().then(function (ok) {
     BACKEND = ok;
+    if (ok) { document.getElementById('loginBtn').hidden = false; }
     var q = new URLSearchParams(location.search);
     if (q.get('error')) {
       toastEl.textContent = '> 설치된 레포가 없어요. 다시 시도해 주세요';
