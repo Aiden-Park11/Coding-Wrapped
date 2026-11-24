@@ -179,7 +179,8 @@ h1,p{margin:0}
 .share{display:flex;flex-direction:column;gap:14px;padding:20px;background:var(--ink);color:#fff;border:3px solid var(--ink);box-shadow:6px 6px 0 var(--violet)}
 .share-top{display:flex;justify-content:space-between;align-items:center;font:12px var(--mono)}
 .stat small{display:block;font:11px var(--mono);color:rgba(255,255,255,.65)}
-.stat .num{font-family:var(--px);font-size:24px;font-weight:700;color:var(--lime)}
+.stat{min-width:0}
+.stat .num{display:block;font-family:var(--px);font-size:24px;font-weight:700;color:var(--lime);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rx{display:flex;gap:10px;font-size:13px;line-height:1.5;color:rgba(255,255,255,.86)}
 .rx b{font-family:var(--mono);color:var(--lime)}
 .linkbtn{background:none;border:none;font:14px var(--mono);color:var(--ink);text-decoration:underline;cursor:pointer;height:44px}
@@ -1212,6 +1213,27 @@ h1,p{margin:0}
     }, delay);
   }
 
+  // 공유 카드 숫자·글자가 칸을 넘으면 한 줄에 들어갈 때까지 글자 크기를 줄임 (최소 14px, 그래도 길면 …)
+  function fitStats(root) {
+    var probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap';
+    document.body.appendChild(probe);
+    root.querySelectorAll('.stat .num').forEach(function (el) {
+      el.style.fontSize = '';
+      var cs = getComputedStyle(el), room = el.clientWidth;
+      var fs = parseFloat(cs.fontSize) || 24;
+      probe.style.fontFamily = cs.fontFamily;
+      probe.style.fontWeight = cs.fontWeight;
+      probe.textContent = el.textContent;
+      probe.style.fontSize = fs + 'px';
+      while (room && probe.offsetWidth > room && fs > 14) {
+        fs -= 1;
+        probe.style.fontSize = fs + 'px';
+      }
+      if (fs !== parseFloat(cs.fontSize)) el.style.fontSize = fs + 'px';
+    });
+    probe.remove();
+  }
   function show(n, dir) {
     if (n < 0 || n >= cards.length) return;
     var prev = idx;
@@ -1224,6 +1246,10 @@ h1,p{margin:0}
     });
     var cur = cards[n];
     cur.classList.add('is-active');
+    if (cur.getAttribute('data-key') === 'share') {
+      fitStats(cur);
+      setTimeout(function () { fitStats(cur); }, 1600); // 카운트업이 끝난 뒤 한 번 더
+    }
     if (prev !== n) {
       var old = cards[prev];
       old.classList.add('is-leaving');
@@ -1372,6 +1398,7 @@ h1,p{margin:0}
     foot.textContent = '나도 해 보기 →\ngithub.com/Aiden-Park11/Coding-Wrapped';
     root.appendChild(foot);
     document.body.appendChild(root);
+    fitStats(root);
     return root;
   }
   function makePNG() {
