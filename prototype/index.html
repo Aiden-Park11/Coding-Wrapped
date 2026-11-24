@@ -3,7 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>코딩 Wrapped 프로토타입</title>
+<title>Coding Wrapped</title>
+<meta name="description" content="1년 동안의 커밋과 백준 기록을 카드 한 장씩 넘겨보며 돌아봐요.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Coding Wrapped">
+<meta property="og:title" content="Coding Wrapped">
+<meta property="og:description" content="1년 동안의 커밋과 백준 기록을 카드 한 장씩 넘겨보며 돌아봐요.">
+<meta property="og:url" content="https://coding-wrapped-00ej.onrender.com/">
+<meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <style>
 @font-face{font-family:"Galmuri11";src:url("fonts/Galmuri11-Bold.woff2") format("woff2");font-weight:400 900;font-display:swap}
@@ -531,7 +538,7 @@ h1,p{margin:0}
   var toastEl = document.getElementById('toast');
   var CARD_MS = 7000;
 
-  /* ---------- pixel sprites ---------- */
+  // 픽셀 아트
   var PAL = { l: '#D4FF3A', k: '#111111', d: '#A6CC24', b: '#D4FF3A', c: 'currentColor', v: '#5B3DE8', D: '#3A27A8', w: '#FFFFFF', o: '#F2A23A', s: '#F0C9A0' };
   var ART = {
     monitor: ['llllllllllllllll','lkkkkkkkkkkkkkkl','lkkkkkkkkkkkkkkl','lkklkkkkkkkkkkkl','lkkklkkkkkkkkkkl','lkkkklkkkkkkkkkl','lkkklkkkkkkkkkkl','lkklkkkbbbbkkkkl','lkkkkkkkkkkkkkkl','lkkkkkkkkkkkkkkl','llllllllllllllll','......llll......','....llllllll....'],
@@ -568,7 +575,7 @@ h1,p{margin:0}
   document.querySelectorAll('[data-ico]').forEach(function (el) { el.innerHTML = pixelSVG(ART[el.getAttribute('data-ico')]); });
   document.querySelectorAll('.btn .pixel-svg').forEach(function (s) { s.style.width = '20px'; });
 
-  /* ---------- fit phone to window on desktop ---------- */
+  // 화면 크기 맞추기
   function fit() {
     if (window.innerWidth <= 500) { phone.style.transform = ''; return; }
     var s = Math.min(1, (window.innerHeight - 70) / 844, (window.innerWidth - 40) / 390);
@@ -577,7 +584,7 @@ h1,p{margin:0}
   window.addEventListener('resize', fit);
   fit();
 
-  /* ---------- typing command on login ---------- */
+  // 로그인 타이핑
   var cmdText = 'git wrapped --year 2026';
   var typedEl = document.getElementById('typedText');
   function typeLogin() {
@@ -591,10 +598,10 @@ h1,p{margin:0}
   }
   typeLogin();
 
-  /* command lines on cards: set char count for stepped typing */
+  // 카드 명령어 타이핑
   story.querySelectorAll('.cmd .t').forEach(function (t) { t.style.setProperty('--n', t.textContent.length); });
 
-  /* ---------- contribution graph (intro, example data) ---------- */
+  // 잔디 그래프
   var lv = ['#222222', '#3B4A12', '#6E8A1A', '#A6CC24', '#D4FF3A'];
   var contrib = document.getElementById('contrib');
   for (var k = 0; k < 17 * 7; k++) {
@@ -608,7 +615,7 @@ h1,p{margin:0}
     contrib.appendChild(cell);
   }
 
-  /* ---------- heatmap (example data) ---------- */
+  // 히트맵
   var heat = document.getElementById('heat');
   var days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
   var base = [4, 4, 3, 1, 0, 0, 1, 2, 2, 2, 3, 4];
@@ -635,15 +642,14 @@ h1,p{margin:0}
     heat.appendChild(rowEl);
   });
 
-  /* ---------- screen switching ---------- */
+  // 화면 전환
   function showScreen(next, prev) {
     prev.classList.add('gone');
     next.classList.remove('hidden', 'gone');
     setTimeout(function () { prev.classList.add('hidden'); prev.classList.remove('gone'); }, 650);
   }
 
-  /* ---------- backend 연결 ---------- */
-  // 백엔드(backend/)가 이 페이지를 서빙할 때만 동작 (데모 모드 없음)
+  // 서버 연결
   var BACKEND = false, WRAP = null, BOJ = null, FAILED = false;
   function hasBackend() {
     if (!/^https?:$/.test(location.protocol)) return Promise.resolve(false);
@@ -653,7 +659,7 @@ h1,p{margin:0}
       .catch(function () { return false; });
   }
 
-  /* ---------- loading terminal ---------- */
+  // 로딩 화면
   var LOG = [
     ['dim', '$ git wrapped --year 2026'],
     ['', '→ GitHub 인증 확인 ........ ', 'ok', 'OK'],
@@ -736,7 +742,7 @@ h1,p{margin:0}
           else if (Date.now() - started > 60000) { result = { ok: false, error: '1분이 지나도 끝나지 않았어요.' }; }
           if (result) { clearInterval(pollTimer); tryFinish(); }
         })
-        .catch(function () { /* 다음 폴링에서 재시도 */ });
+        .catch(function () { });
     }
     poll();
     pollTimer = setInterval(poll, 1000);
@@ -772,7 +778,6 @@ h1,p{margin:0}
       note.textContent = msg;
       note.style.color = '#E85D4A';
     }
-    // solved.ac 공식 API v4 는 앱 키가 필요해서 우리 서버를 거쳐서만 조회 (키는 서버에만 있음)
     fetch('/api/boj?handle=' + encodeURIComponent(id))
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
       .then(function (res) {
@@ -795,7 +800,7 @@ h1,p{margin:0}
     startStory(0);
   });
 
-  /* 백준 카드 제목: 푼 문제 수에 따라 */
+  // 백준 카드 제목
   function bojTitle(n) {
     if (n === 0) return ['백준은 아직', '시작 전이에요'];
     if (n < 10) return ['백준에 첫발을', '내디뎠어요'];
@@ -806,7 +811,7 @@ h1,p{margin:0}
     return ['당신은', '걸어 다니는 백준'];
   }
 
-  /* ---------- 실제 데이터 → 카드 ---------- */
+  // 카드에 데이터 채우기
   function txt(el, s) { if (el) el.textContent = s; }
   function setCount(el, n, prefix, suffix) {
     if (!el) return;
@@ -823,11 +828,9 @@ h1,p{margin:0}
   }
   function applyData(d, boj) {
     var c = K, n = d.numbers;
-    // 0 intro
     c.intro.querySelector('p.sub').textContent = '올해 커밋 ' + n.commits.toLocaleString('ko-KR') + '개' +
       (boj ? '와 백준 ' + boj.solved + '문제를' : '를') + '\n한 장씩 넘겨보며 돌아봐요.';
     c.intro.querySelector('p.sub').style.whiteSpace = 'pre-line';
-    // 1 numbers
     setCount(c.numbers.querySelector('.big'), n.commits);
     txt(c.numbers.querySelector('.comment'), '// 하루 평균 ' + n.daily_avg + '번 · 커밋한 날 ' + n.active_days + '일');
     var tiles = c.numbers.querySelectorAll('.tile');
@@ -838,14 +841,12 @@ h1,p{margin:0}
     if (n.main_language) setCount(tiles[3].querySelector('.num'), n.main_language.percent, n.main_language.name + ' ', '%');
     if (n.main_language && n.main_language.name.length > 4) { tiles[3].querySelector('.num').style.fontSize = '20px'; tiles[3].querySelector('.num').style.lineHeight = '1.3'; }
     else { tiles[3].querySelector('.num').removeAttribute('data-count'); txt(tiles[3].querySelector('.num'), '-'); }
-    // 1.5 rookie
     if (!d.enough_data) {
       var need = Math.max(1, 10 - n.commits);
       txt(document.getElementById('rkN'), String(n.commits));
       txt(document.getElementById('rkNeed'), '커밋 ' + need + '개 남음');
       document.getElementById('rkFill').style.setProperty('--w', Math.round(100 * n.commits / 10) + '%');
     }
-    // 2 time
     var hm = d.time.heatmap.levels, cells = c.time.querySelectorAll('.cell'), k = 0;
     for (var r = 0; r < 7; r++) for (var col = 0; col < 12; col++) { cells[k++].style.background = colors[hm[r][col]]; }
     var tw = timeWord(d.time.peak_hour);
@@ -857,7 +858,6 @@ h1,p{margin:0}
     setCount(call.querySelector('[data-count]'), d.time.night_share_0_4, '', '%');
     var lines = call.querySelectorAll(':scope > span');
     txt(lines[2], d.time.peak_hour == null ? '' : '가장 많이 커밋한 시간: ' + d.time.peak_hour + '시');
-    // 3 messages
     var top = d.messages.top, max = top.length ? top[0].count : 1;
     c.msgs.querySelectorAll('.rank').forEach(function (row, i) {
       var m = top[i];
@@ -872,7 +872,6 @@ h1,p{margin:0}
     txt(minis[0].querySelector('span'), d.messages.shortest ? '"' + d.messages.shortest.slice(0, 12) + '"' : '-');
     var mr = d.messages.most_rewritten;
     txt(minis[1].querySelector('span'), mr ? mr.file + ' × ' + mr.count : '-');
-    // 4 boj (없으면 setupCards 에서 숨김)
     if (boj) {
       var bt = bojTitle(boj.solved || 0);
       var h = c.boj.querySelector('h1.title');
@@ -921,10 +920,8 @@ h1,p{margin:0}
         if (el.textContent.indexOf('longest_struggle') >= 0) el.style.display = 'none';
       });
     }
-    // 5~7 DEVTI · 궁합 · RPG
     renderNew(d, boj);
     var t = d.type;
-    // 8 share
     txt(document.getElementById('handle'), '@' + d.login);
     var share = c.share.querySelector('.share');
     var stats = share.querySelectorAll('.stat');
@@ -943,7 +940,7 @@ h1,p{margin:0}
     txt(rx[2], night >= 20 ? '새벽 커밋 비율 ' + night + '% → ' + Math.max(5, night - 15) + '% 도전' : '지금의 건강한 코딩 시간 유지하기');
   }
 
-  /* ---------- story ---------- */
+  // 스토리 넘기기
   var allCards = cards.slice();
   var K = {};
   allCards.forEach(function (c) { K[c.getAttribute('data-key')] = c; });
@@ -965,7 +962,7 @@ h1,p{margin:0}
     fills = barsEl.querySelectorAll('span');
   }
   setupCards(false);
-  /* ---------- DEVTI · 궁합 · RPG ---------- */
+  // DEVTI · 궁합 · RPG
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (ch) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
@@ -1046,7 +1043,7 @@ h1,p{margin:0}
     document.getElementById('mtBtn').textContent = '친구 유형 골라서 궁합 보기 →';
   }
 
-  /* 친구 유형을 고르면 궁합 카드의 두 번째 칸을 친구 결과로 바꿔서 보여줌 */
+  // 친구 궁합
   var FRIEND_LINE = [
     '똑같은 유형! 같은 시간에 같은 방식으로 달려서 force push 충돌 주의.',
     '거의 쌍둥이라 편하긴 한데, 서로의 빈틈은 못 메워요.',
@@ -1063,7 +1060,7 @@ h1,p{margin:0}
     document.getElementById('mtBtn').textContent = '다른 친구 유형 골라 보기 →';
   }
 
-  /* 공유 카드: 나랑 잘 맞는 팀원 찾기 문구 */
+  // 팀원 찾기 문구
   function renderWanted(code) {
     var best = opposite(code);
     var line = code[0] === 'O'
@@ -1140,7 +1137,7 @@ h1,p{margin:0}
     share.querySelector('.px').textContent = DEVTI[code][0];
   }
 
-  /* 16유형 목록 모달: 목록 보기 / 친구 궁합 고르기 */
+  // 16유형 모달
   var dvModal = document.getElementById('dvModal');
   var modalMode = 'list', wasPaused = false;
   function openModal(mode) {
@@ -1269,7 +1266,7 @@ h1,p{margin:0}
     pauseBadge.classList.toggle('on', p);
   }
 
-  /* tap / swipe / hold */
+  // 터치 조작
   var downX = 0, downY = 0, holdTimer = null, held = false, pointerOn = false;
   story.addEventListener('pointerdown', function (e) {
     if (e.target.closest('button, a, input')) return;
@@ -1303,7 +1300,7 @@ h1,p{margin:0}
     if (e.key === ' ') { e.preventDefault(); setPaused(!paused); }
   });
 
-  /* toast */
+  // 토스트
   var toastTimer = null;
   story.querySelectorAll('[data-toast]').forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -1314,7 +1311,7 @@ h1,p{margin:0}
     });
   });
 
-  /* ---------- 시작: 백엔드 확인 + 로그인 후 돌아온 경우 ---------- */
+  // 시작
   hasBackend().then(function (ok) {
     BACKEND = ok;
     if (ok) { document.getElementById('loginBtn').hidden = false; }
@@ -1331,7 +1328,7 @@ h1,p{margin:0}
     }
   });
 
-  /* ---------- 공유 카드 → PNG ---------- */
+  // 이미지 저장 · 공유
   var H2C_URL = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
   function showToast(msg, ms) {
     toastEl.textContent = msg;
@@ -1361,7 +1358,6 @@ h1,p{margin:0}
       var cl = node.cloneNode(true);
       cl.removeAttribute('id');
       cl.querySelectorAll('[id]').forEach(function (x) { x.removeAttribute('id'); });
-      // 카운트업 중간 값이 찍히지 않게 최종 숫자로 고정
       cl.querySelectorAll('[data-count]').forEach(function (x) {
         x.textContent = (x.getAttribute('data-prefix') || '') + Number(x.getAttribute('data-count')).toLocaleString('ko-KR') + (x.getAttribute('data-suffix') || '');
       });
@@ -1432,7 +1428,7 @@ h1,p{margin:0}
     typeLogin();
   });
 
-  // 서버 세션(분석 결과)을 즉시 삭제 → solved.ac 개발자 약관 제6조 ③, 개인정보 처리방침 5번
+  // 기록 지우기
   document.getElementById('wipe').addEventListener('click', function () {
     BOJ = null;
     var done = function () { showToast('> 서버에 있던 내 기록을 지웠어요', 2200); setTimeout(function () { location.href = '/'; }, 900); };
