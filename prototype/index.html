@@ -133,6 +133,12 @@ h1,p{margin:0}
 .tile small{font:11px var(--mono);color:rgba(255,255,255,.65)}
 .tile .num{font-family:var(--px);font-size:30px;font-weight:700;color:var(--lime)}
 .spacer{flex:1}
+.share-fit{display:flex;flex-direction:column;gap:18px}
+.share-actions{display:flex;flex-direction:column;gap:4px;flex-shrink:0}
+.share-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.share-btns .btn{font-size:15px;gap:6px;padding:0 8px;white-space:nowrap}
+.share-links{display:flex;justify-content:space-between;align-items:center}
+.share-links .linkbtn{height:32px}
 .tap-note{font:12px var(--mono);text-align:center;opacity:.6}
 
 /* github-style contribution graph (intro) */
@@ -487,6 +493,7 @@ h1,p{margin:0}
     <!-- 6 공유 -->
     <article class="card c-lime is-next" data-bars="dark" data-key="share">
       <div class="cmd"><span class="ps">$</span><span class="t">wrapped export --png --story</span></div>
+      <div class="share-fit">
       <div class="share a" style="--d:250ms">
         <div class="share-top"><span style="color:var(--lime);font-weight:700">CODE_WRAPPED.2026</span><span style="color:rgba(255,255,255,.65)" id="handle">@you</span></div>
         <div><small class="mono" style="font-size:11px;color:rgba(255,255,255,.65)">type</small><div class="px" style="font-size:24px;line-height:1.3">야행성 몰아치기<br>솔로 리팩토러</div></div>
@@ -505,12 +512,17 @@ h1,p{margin:0}
         </div>
       </div>
       <div class="wanted a" style="--d:950ms" id="wanted"></div>
+      </div>
       <div class="spacer"></div>
-      <div class="a" style="--d:1050ms;display:flex;flex-direction:column;gap:10px">
-        <button class="btn btn-ink notch" type="button" id="saveImg"><span class="ico" data-ico="floppy"></span><span class="lbl">이미지로 저장</span></button>
-        <button class="btn btn-line notch" type="button" id="shareImg"><span class="ico" data-ico="share"></span><span class="lbl">스토리로 공유</span></button>
-        <button class="linkbtn" type="button" id="restart">$ restart</button>
-        <button class="linkbtn" type="button" id="wipe" style="color:rgba(255,255,255,.55);font-size:12px;height:28px">$ 내 기록 지우고 나가기</button>
+      <div class="a share-actions" style="--d:1050ms">
+        <div class="share-btns">
+          <button class="btn btn-ink notch" type="button" id="saveImg"><span class="ico" data-ico="floppy"></span><span class="lbl">이미지로 저장</span></button>
+          <button class="btn btn-line notch" type="button" id="shareImg"><span class="ico" data-ico="share"></span><span class="lbl">스토리로 공유</span></button>
+        </div>
+        <div class="share-links">
+          <button class="linkbtn" type="button" id="restart">$ restart</button>
+          <button class="linkbtn" type="button" id="wipe" style="color:rgba(10,10,10,.6);font-size:12px">$ 내 기록 지우고 나가기</button>
+        </div>
       </div>
     </article>
   </section>
@@ -1244,6 +1256,15 @@ h1,p{margin:0}
     });
     probe.remove();
   }
+  // 화면이 낮으면 미리보기(공유 카드)만 줄여서 아래 버튼이 잘리지 않게. 저장되는 이미지 크기는 그대로.
+  function fitShare(card) {
+    var box = card.querySelector('.share-fit');
+    if (!box) return;
+    box.style.zoom = '';
+    var over = card.scrollHeight - card.clientHeight;
+    if (over > 0) box.style.zoom = Math.max(0.6, (box.offsetHeight - over) / box.offsetHeight).toFixed(3);
+  }
+  window.addEventListener('resize', function () { if (K.share && K.share.classList.contains('is-active')) fitShare(K.share); });
   function show(n, dir) {
     if (n < 0 || n >= cards.length) return;
     var prev = idx;
@@ -1258,7 +1279,8 @@ h1,p{margin:0}
     cur.classList.add('is-active');
     if (cur.getAttribute('data-key') === 'share') {
       fitStats(cur);
-      setTimeout(function () { fitStats(cur); }, 1600); // 카운트업이 끝난 뒤 한 번 더
+      fitShare(cur);
+      setTimeout(function () { fitStats(cur); fitShare(cur); }, 1600); // 카운트업이 끝난 뒤 한 번 더
     }
     if (prev !== n) {
       var old = cards[prev];
