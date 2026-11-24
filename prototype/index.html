@@ -316,6 +316,10 @@ h1,p{margin:0}
     <p class="typed" id="typed" aria-label="git wrapped 명령어"><span class="ps">$</span> <span id="typedText"></span><span class="caret" style="color:var(--lime)"></span></p>
     <p class="sub" style="color:rgba(255,255,255,.72)">1년 동안의 커밋과 백준 기록을<br>카드 한 장씩 넘겨보며 돌아봐요.</p>
     <div class="spacer"></div>
+    <div class="notice" id="inappNotice" hidden style="border-color:#E85D4A">
+      <span><b>앱 안 브라우저</b>에서는 GitHub 로그인이 막힐 수 있어요.</span>
+      <span>오른쪽 위 메뉴 → <b>다른 브라우저로 열기</b>로 열어 주세요.</span>
+    </div>
     <div class="notice">
       <span>다음 화면에서 <b>초록색 Install</b> 버튼만 누르면 돼요.</span>
       <span>코드는 읽지 않고, <b>읽기 권한</b>만 받아요.</span>
@@ -1351,14 +1355,31 @@ h1,p{margin:0}
   });
 
   /* ---------- 시작: 백엔드 확인 + 로그인 후 돌아온 경우 ---------- */
+  (function inApp() {
+    var ua = navigator.userAgent || '';
+    if (/KAKAOTALK/i.test(ua)) {
+      location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
+      return;
+    }
+    if (/\bLine\//i.test(ua) && location.search.indexOf('openExternalBrowser') < 0) {
+      location.href = location.pathname + (location.search ? location.search + '&' : '?') + 'openExternalBrowser=1';
+      return;
+    }
+    if (/Instagram|FBAN|FBAV|NAVER\(inapp|everytimeApp|DaumApps|; wv\)/i.test(ua)) {
+      document.getElementById('inappNotice').hidden = false;
+    }
+  })();
   hasBackend().then(function (ok) {
     BACKEND = ok;
     if (ok) { document.getElementById('loginBtn').hidden = false; }
     var q = new URLSearchParams(location.search);
     if (q.get('error')) {
-      toastEl.textContent = '> 설치된 레포가 없어요. 다시 시도해 주세요';
+      history.replaceState(null, '', location.pathname);
+      toastEl.textContent = q.get('error') === 'state'
+        ? '> 로그인을 시작한 브라우저와 달라요. 같은 브라우저에서 다시 시작해 주세요'
+        : '> 설치된 레포가 없어요. 다시 시도해 주세요';
       toastEl.classList.add('on');
-      setTimeout(function () { toastEl.classList.remove('on'); }, 2500);
+      setTimeout(function () { toastEl.classList.remove('on'); }, 3200);
     }
     if (ok && q.get('view') === 'loading') {
       history.replaceState(null, '', location.pathname);
@@ -1368,7 +1389,7 @@ h1,p{margin:0}
   });
 
   /* ---------- 공유 카드 → PNG ---------- */
-  var H2C_URL = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+  var H2C_URL = 'vendor/html2canvas.min.js';
   function showToast(msg, ms) {
     toastEl.textContent = msg;
     toastEl.classList.add('on');

@@ -57,7 +57,9 @@ def test_rejects_bad_state(monkeypatch):
     c = _setup(monkeypatch)
     c.get("/auth/start")
     r = c.get("/auth/callback", params={"code": "abc", "state": "forged"})
-    assert r.status_code == 400
+    # 진행하지 않고(세션 없음) 처음 화면에서 안내
+    assert r.status_code == 307 and r.headers["location"] == "/?error=state"
+    assert "cw_sid" not in r.cookies
 
 
 def test_rejects_foreign_installation(monkeypatch):
@@ -135,3 +137,26 @@ def test_privacy_page_and_logout_wipes_session(monkeypatch):
     c.cookies.set("cw_sid", "sid2")
     assert c.post("/auth/logout").status_code == 200
     assert "sid2" not in main.SESSIONS
+
+
+def test_security_headers(monkeypatch):
+    c = _setup(monkeypatch)
+    for path in ("/", "/health", "/api/wrapped", "/privacy.html"):
+        h = c.get(path).headers
+        assert h["x-content-type-options"] == "nosniff"
+        assert h["x-frame-options"] == "DENY"
+        assert "frame-ancestors 'none'" in h["content-security-policy"]
+        assert "'unsafe-inline'" not in h["content-security-policy"].split("script-src")[1].split(";")[0]
+    assert c.get("/api/wrapped").headers["cache-control"] == "no-store"
+    assert c.get("/docs").status_code == 404   # API 문서 비공개
+    monkeypatch.setattr(main.config, "COOKIE_SECURE", True)
+    assert c.get("/health").headers["strict-transport-security"].startswith("max-age=31536000")
+
+
+def test_csp_allows_only_our_inline_script():
+    import base64, hashlib, re
+    html = (main.FRONT / "index.html").read_text(encoding="utf-8")
+    body = re.findall(r"<script>(.*?)</script>", html, flags=re.S)[0]
+    digest = base64.b64encode(hashlib.sha256(body.encode()).digest()).decode()
+    assert f"'sha256-{digest}'" in main.CSP
+    assert "cdnjs" not in html   # 외부 스크립트 없음 (html2canvas 자체 호스팅)
