@@ -81,7 +81,7 @@ async def security_headers(request: Request, call_next):
 
 # 해커톤 규모라 메모리에 보관. 토큰은 저장하지 않고 분석 결과만 남긴다.
 SESSIONS: dict[str, dict] = {}
-SID_COOKIE, STATE_COOKIE, RETURNING_COOKIE = "cw_sid", "cw_state", "cw_returning"
+SID_COOKIE, STATE_COOKIE = "cw_sid", "cw_state"
 _TASKS: set[asyncio.Task] = set()   # 백그라운드 작업이 GC 로 사라지지 않게 참조 보관
 
 
@@ -108,17 +108,13 @@ async def auth_start(request: Request):
     if not config.github_ready():
         raise HTTPException(503, "GitHub App 환경변수가 설정되지 않았어요 (.env 확인)")
     state = secrets.token_urlsafe(24)
-    if request.cookies.get(RETURNING_COOKIE) or request.query_params.get("login") == "1":
-        # 이미 설치한 사용자(이 브라우저에서 로그인한 적 있거나 '바로 로그인'을 누른 경우):
-        # 설치 화면 없이 바로 승인 (이미 승인했다면 클릭 없이 통과)
-        # 설치 화면으로 보내면 GitHub가 설치 설정 페이지만 보여 주고 돌아오지 않음
-        url = "https://github.com/login/oauth/authorize?" + urlencode({
-            "client_id": config.CLIENT_ID,
-            "redirect_uri": f"{config.BASE_URL}/auth/callback",
-            "state": state,
-        })
-    else:
-        url = _install_url(state)
+    # 항상 로그인(승인)부터. 설치 여부는 콜백에서 확인해서, 처음인 사람만 설치 화면으로 보낸다.
+    # 설치 화면부터 보내면 이미 설치한 사람은 GitHub 설정 페이지(Configure)로 빠져 돌아오지 못한다.
+    url = "https://github.com/login/oauth/authorize?" + urlencode({
+        "client_id": config.CLIENT_ID,
+        "redirect_uri": f"{config.BASE_URL}/auth/callback",
+        "state": state,
+    })
     resp = RedirectResponse(url)
     resp.set_cookie(STATE_COOKIE, state, **_cookie_args(600))
     return resp
@@ -154,7 +150,6 @@ async def auth_callback(request: Request, code: str | None = None, state: str | 
         new_state = secrets.token_urlsafe(24)
         resp = RedirectResponse(_install_url(new_state))
         resp.set_cookie(STATE_COOKIE, new_state, **_cookie_args(600))
-        resp.delete_cookie(RETURNING_COOKIE)
         return resp
 
     _cleanup()
@@ -167,7 +162,7 @@ async def auth_callback(request: Request, code: str | None = None, state: str | 
 
     resp = RedirectResponse("/?view=loading")
     resp.set_cookie(SID_COOKIE, sid, **_cookie_args(config.SESSION_TTL_SEC))
-    resp.set_cookie(RETURNING_COOKIE, "1", **_cookie_args(60 * 60 * 24 * 365))
+    resp.delete_cookie("cw_returning")   # 예전 버전이 남긴 쿠키 정리
     resp.delete_cookie(STATE_COOKIE)
     return resp
 

@@ -321,11 +321,10 @@ h1,p{margin:0}
       <span>오른쪽 위 메뉴 → <b>다른 브라우저로 열기</b>로 열어 주세요.</span>
     </div>
     <div class="notice">
-      <span>다음 화면에서 <b>초록색 Install</b> 버튼만 누르면 돼요.</span>
+      <span>GitHub 로그인 후, 처음이라면 <b>초록색 Install</b>만 누르면 돼요.</span>
       <span>코드는 읽지 않고, <b>읽기 권한</b>만 받아요.</span>
     </div>
     <button class="btn btn-lime notch" id="startBtn" type="button"><span id="icoBranch"></span>GitHub로 시작하기</button>
-    <button class="linkbtn" id="loginBtn" type="button" hidden style="color:var(--lime);height:32px;margin-top:-4px;font-size:13px">$ 전에 설치했다면 → 바로 로그인</button>
     <a href="privacy.html" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);text-align:center;margin-top:-4px">시작하면 개인정보 처리방침에 동의하는 것으로 봐요 · 백준 데이터: solved.ac</a>
   </section>
 
@@ -760,9 +759,6 @@ h1,p{margin:0}
   document.getElementById('startBtn').addEventListener('click', function () {
     if (BACKEND) { location.href = '/auth/start'; return; }
     showToast('> 서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요', 2600);
-  });
-  document.getElementById('loginBtn').addEventListener('click', function () {
-    if (BACKEND) { location.href = '/auth/start?login=1'; }
   });
 
   document.getElementById('bojForm').addEventListener('submit', function (e) {
@@ -1371,7 +1367,6 @@ h1,p{margin:0}
   })();
   hasBackend().then(function (ok) {
     BACKEND = ok;
-    if (ok) { document.getElementById('loginBtn').hidden = false; }
     var q = new URLSearchParams(location.search);
     if (q.get('error')) {
       history.replaceState(null, '', location.pathname);
