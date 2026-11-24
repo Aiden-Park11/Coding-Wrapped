@@ -312,6 +312,7 @@ h1,p{margin:0}
     <button class="btn btn-lime notch" id="startBtn" type="button"><span id="icoBranch"></span>GitHub로 시작하기</button>
     <button class="linkbtn" id="loginBtn" type="button" hidden style="color:var(--lime);height:32px;margin-top:-4px;font-size:13px">$ 전에 설치했다면 → 바로 로그인</button>
     <button class="linkbtn" id="demoBtn" type="button" style="color:rgba(255,255,255,.7);height:36px;margin-top:-6px">$ 로그인 없이 데모로 보기</button>
+    <a href="privacy.html" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.5);text-align:center;margin-top:-4px">시작하면 개인정보 처리방침에 동의하는 것으로 봐요 · 백준 데이터: solved.ac</a>
   </section>
 
   <!-- ===== 2. 로딩 ===== -->
@@ -329,7 +330,7 @@ h1,p{margin:0}
         <input id="bojId" type="text" placeholder="예: joon2026" autocomplete="off">
         <button type="submit">연결</button>
       </div>
-      <small id="bojNote">로그인 없이 공개 기록만 가져와요. 건너뛰어도 돼요.</small>
+      <small id="bojNote"><b>본인 아이디만</b> 입력해 주세요. solved.ac에서 티어·푼 문제 수만 읽고 저장하지 않아요. 건너뛰어도 돼요. <a href="privacy.html" target="_blank" rel="noopener" style="color:inherit">개인정보 처리방침</a></small>
     </form>
     <button class="btn btn-lime notch" id="goStory" type="button">내 Wrapped 보기 →</button>
   </section>
@@ -509,6 +510,7 @@ h1,p{margin:0}
         <button class="btn btn-ink notch" type="button" id="saveImg"><span class="ico" data-ico="floppy"></span><span class="lbl">이미지로 저장</span></button>
         <button class="btn btn-line notch" type="button" id="shareImg"><span class="ico" data-ico="share"></span><span class="lbl">스토리로 공유</span></button>
         <button class="linkbtn" type="button" id="restart">$ restart</button>
+        <button class="linkbtn" type="button" id="wipe" style="color:rgba(255,255,255,.55);font-size:12px;height:28px">$ 내 기록 지우고 나가기</button>
       </div>
     </article>
   </section>
@@ -1463,6 +1465,14 @@ h1,p{margin:0}
     cancelAnimationFrame(raf);
     showScreen(login, story);
     typeLogin();
+  });
+
+  // 서버 세션(분석 결과)을 즉시 삭제 → solved.ac 개발자 약관 제6조 ③, 개인정보 처리방침 5번
+  document.getElementById('wipe').addEventListener('click', function () {
+    BOJ = null;
+    var done = function () { showToast('> 서버에 있던 내 기록을 지웠어요', 2200); setTimeout(function () { location.href = '/'; }, 900); };
+    if (!BACKEND || MODE === 'demo') { done(); return; }
+    fetch('/auth/logout', { method: 'POST' }).then(done, done);
   });
 })();
 </script>
