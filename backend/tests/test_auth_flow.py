@@ -123,3 +123,16 @@ def test_login_shortcut_and_missing_install(monkeypatch):
     assert r.headers["location"].startswith("https://github.com/apps/knu-code-wrapped/installations/new?state=")
     new_state = c.cookies.get("cw_state")
     assert new_state and new_state != state and new_state in r.headers["location"]
+
+
+def test_privacy_page_and_logout_wipes_session(monkeypatch):
+    c = _setup(monkeypatch)
+    # solved.ac 개발자 약관 제6조 ④: 개인정보 처리방침 공개
+    r = c.get("/privacy.html")
+    assert r.status_code == 200 and "개인정보 처리방침" in r.text and "2시간" in r.text
+    assert "privacy.html" in c.get("/").text
+    # 제6조 ③: 철회(로그아웃) 시 즉시 파기
+    main.SESSIONS["sid2"] = {"created": time.time(), "login": "me", "status": "done", "result": {"x": 1}}
+    c.cookies.set("cw_sid", "sid2")
+    assert c.post("/auth/logout").status_code == 200
+    assert "sid2" not in main.SESSIONS
