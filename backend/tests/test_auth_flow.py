@@ -33,7 +33,8 @@ def test_full_login_flow(monkeypatch):
 
     r = c.get("/auth/start")
     assert r.status_code == 307
-    assert r.headers["location"].startswith("https://github.com/apps/knu-code-wrapped/installations/new?state=")
+    # 첫 방문도 로그인(승인)부터: 이미 설치한 사람이 GitHub 설정 페이지에 갇히지 않게
+    assert r.headers["location"].startswith("https://github.com/login/oauth/authorize?")
     state = c.cookies.get("cw_state")
 
     r = c.get("/auth/callback", params={"code": "abc", "state": state, "installation_id": 42})
@@ -48,7 +49,7 @@ def test_full_login_flow(monkeypatch):
     assert body["status"] == "done", body
     assert body["data"]["numbers"]["commits"] == 151
 
-    # 재방문: 설치 화면 대신 바로 승인 화면
+    # 재방문도 같은 승인 화면
     r = c.get("/auth/start")
     assert r.headers["location"].startswith("https://github.com/login/oauth/authorize?")
 
