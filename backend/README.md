@@ -53,12 +53,9 @@ cd ~/Documents/Coding-Wrapped
 | `GET /auth/start` | 로그인 시작. 첫 방문은 앱 설치 화면, 재방문은 바로 승인 화면 |
 | `GET /auth/callback` | GitHub 가 돌려보내는 주소. `state`·설치 정보 검증 후 분석 시작 |
 | `GET /api/wrapped` | 분석 결과. `status`: `pending` → `done` / `error` (1초마다 폴링) |
-| `GET /api/demo` | 데모 데이터 (발표용, 로그인 불필요) |
-| `GET /api/boj?handle=아이디` | 백준 티어·해결 수·많이 푼 유형 (solved.ac 공식 API v4, 앱 키 필요) |
-| `POST /auth/logout` | 세션 삭제 |
+| `GET /api/boj?handle=아이디` | 백준 티어·해결 수·많이 푼 유형 (solved.ac 공식 API v4, 앱 키 필요, 로그인 세션 전용) |
+| `POST /auth/logout` | 세션 즉시 삭제 (카드 마지막의 "내 기록 지우고 나가기") |
 | `GET /health` | 서버 상태 (잠자기 방지 핑용) |
-
-`/api/wrapped` 결과 예시는 `GET /api/demo` 를 보면 같은 모양이에요.
 
 ## 4. 동작 원칙
 

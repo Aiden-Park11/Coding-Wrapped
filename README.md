@@ -36,9 +36,9 @@ GitHub 계정만 연결하면, 1년 동안의 코딩 활동을 스포티파이 W
 
 - 탭 / 스와이프 / `←` `→` 키로 넘기기
 - 꾹 누르거나 스페이스바로 일시정지
-- 백엔드 없이 열면 데모 데이터, 백엔드로 열면 GitHub 로그인 후 실제 데이터
+- 백엔드로 열어야 동작해요 (GitHub 로그인 후 실제 데이터만 사용, 데모 모드 없음)
 
-GitHub Pages를 켜면(Settings → Pages → `main` 브랜치) `https://aiden-park11.github.io/Coding-Wrapped/prototype/`에서 바로 볼 수 있어요.
+배포 주소: https://coding-wrapped-00ej.onrender.com (GitHub Pages 같은 정적 호스팅에서는 서버가 없어서 동작하지 않아요)
 
 ## 백엔드 실행 (맥)
 

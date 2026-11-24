@@ -18,7 +18,6 @@ from fastapi.staticfiles import StaticFiles
 
 from . import config
 from .boj import HANDLE_RE, fetch_boj
-from .demo import DEMO_BOJ, DEMO_WRAPPED
 from .github import GitHub, GitHubError, collect_all, exchange_code, get_installations, get_user
 from .stats import compute
 
@@ -159,11 +158,6 @@ async def wrapped(request: Request):
     if s["status"] == "error":
         body["error"] = s.get("error")
     return body
-
-
-@app.get("/api/demo")
-async def demo():
-    return {"status": "done", "login": DEMO_WRAPPED["login"], "data": DEMO_WRAPPED, "boj": DEMO_BOJ}
 
 
 BOJ_PER_MIN = 5                          # 세션당 1분에 조회 가능한 횟수
