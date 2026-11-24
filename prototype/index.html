@@ -531,6 +531,7 @@ h1,p{margin:0}
   var toastEl = document.getElementById('toast');
   var CARD_MS = 7000;
 
+  // 픽셀 아트
   var PAL = { l: '#D4FF3A', k: '#111111', d: '#A6CC24', b: '#D4FF3A', c: 'currentColor', v: '#5B3DE8', D: '#3A27A8', w: '#FFFFFF', o: '#F2A23A', s: '#F0C9A0' };
   var ART = {
     monitor: ['llllllllllllllll','lkkkkkkkkkkkkkkl','lkkkkkkkkkkkkkkl','lkklkkkkkkkkkkkl','lkkklkkkkkkkkkkl','lkkkklkkkkkkkkkl','lkkklkkkkkkkkkkl','lkklkkkbbbbkkkkl','lkkkkkkkkkkkkkkl','lkkkkkkkkkkkkkkl','llllllllllllllll','......llll......','....llllllll....'],
@@ -567,6 +568,7 @@ h1,p{margin:0}
   document.querySelectorAll('[data-ico]').forEach(function (el) { el.innerHTML = pixelSVG(ART[el.getAttribute('data-ico')]); });
   document.querySelectorAll('.btn .pixel-svg').forEach(function (s) { s.style.width = '20px'; });
 
+  // 화면 크기 맞추기
   function fit() {
     if (window.innerWidth <= 500) { phone.style.transform = ''; return; }
     var s = Math.min(1, (window.innerHeight - 70) / 844, (window.innerWidth - 40) / 390);
@@ -575,6 +577,7 @@ h1,p{margin:0}
   window.addEventListener('resize', fit);
   fit();
 
+  // 로그인 타이핑
   var cmdText = 'git wrapped --year 2026';
   var typedEl = document.getElementById('typedText');
   function typeLogin() {
@@ -588,8 +591,10 @@ h1,p{margin:0}
   }
   typeLogin();
 
+  // 카드 명령어 타이핑
   story.querySelectorAll('.cmd .t').forEach(function (t) { t.style.setProperty('--n', t.textContent.length); });
 
+  // 잔디 그래프
   var lv = ['#222222', '#3B4A12', '#6E8A1A', '#A6CC24', '#D4FF3A'];
   var contrib = document.getElementById('contrib');
   for (var k = 0; k < 17 * 7; k++) {
@@ -603,6 +608,7 @@ h1,p{margin:0}
     contrib.appendChild(cell);
   }
 
+  // 히트맵
   var heat = document.getElementById('heat');
   var days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
   var base = [4, 4, 3, 1, 0, 0, 1, 2, 2, 2, 3, 4];
@@ -629,12 +635,14 @@ h1,p{margin:0}
     heat.appendChild(rowEl);
   });
 
+  // 화면 전환
   function showScreen(next, prev) {
     prev.classList.add('gone');
     next.classList.remove('hidden', 'gone');
     setTimeout(function () { prev.classList.add('hidden'); prev.classList.remove('gone'); }, 650);
   }
 
+  // 서버 연결
   var BACKEND = false, WRAP = null, BOJ = null, FAILED = false;
   function hasBackend() {
     if (!/^https?:$/.test(location.protocol)) return Promise.resolve(false);
@@ -644,6 +652,7 @@ h1,p{margin:0}
       .catch(function () { return false; });
   }
 
+  // 로딩 화면
   var LOG = [
     ['dim', '$ git wrapped --year 2026'],
     ['', '→ GitHub 인증 확인 ........ ', 'ok', 'OK'],
@@ -784,6 +793,7 @@ h1,p{margin:0}
     startStory(0);
   });
 
+  // 백준 카드 제목
   function bojTitle(n) {
     if (n === 0) return ['백준은 아직', '시작 전이에요'];
     if (n < 10) return ['백준에 첫발을', '내디뎠어요'];
@@ -794,6 +804,7 @@ h1,p{margin:0}
     return ['당신은', '걸어 다니는 백준'];
   }
 
+  // 카드에 데이터 채우기
   function txt(el, s) { if (el) el.textContent = s; }
   function setCount(el, n, prefix, suffix) {
     if (!el) return;
@@ -922,6 +933,7 @@ h1,p{margin:0}
     txt(rx[2], night >= 20 ? '새벽 커밋 비율 ' + night + '% → ' + Math.max(5, night - 15) + '% 도전' : '지금의 건강한 코딩 시간 유지하기');
   }
 
+  // 스토리 넘기기
   var allCards = cards.slice();
   var K = {};
   allCards.forEach(function (c) { K[c.getAttribute('data-key')] = c; });
@@ -943,6 +955,7 @@ h1,p{margin:0}
     fills = barsEl.querySelectorAll('span');
   }
   setupCards(false);
+  // DEVTI · 궁합 · RPG
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (ch) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
@@ -1023,6 +1036,7 @@ h1,p{margin:0}
     document.getElementById('mtBtn').textContent = '친구 유형 골라서 궁합 보기 →';
   }
 
+  // 친구 궁합
   var FRIEND_LINE = [
     '똑같은 유형! 같은 시간에 같은 방식으로 달려서 force push 충돌 주의.',
     '거의 쌍둥이라 편하긴 한데, 서로의 빈틈은 못 메워요.',
@@ -1039,6 +1053,7 @@ h1,p{margin:0}
     document.getElementById('mtBtn').textContent = '다른 친구 유형 골라 보기 →';
   }
 
+  // 팀원 찾기 문구
   function renderWanted(code) {
     var best = opposite(code);
     var line = code[0] === 'O'
@@ -1115,6 +1130,7 @@ h1,p{margin:0}
     share.querySelector('.px').textContent = DEVTI[code][0];
   }
 
+  // 16유형 모달
   var dvModal = document.getElementById('dvModal');
   var modalMode = 'list', wasPaused = false;
   function openModal(mode) {
@@ -1243,6 +1259,7 @@ h1,p{margin:0}
     pauseBadge.classList.toggle('on', p);
   }
 
+  // 터치 조작
   var downX = 0, downY = 0, holdTimer = null, held = false, pointerOn = false;
   story.addEventListener('pointerdown', function (e) {
     if (e.target.closest('button, a, input')) return;
@@ -1276,6 +1293,7 @@ h1,p{margin:0}
     if (e.key === ' ') { e.preventDefault(); setPaused(!paused); }
   });
 
+  // 토스트
   var toastTimer = null;
   story.querySelectorAll('[data-toast]').forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -1286,6 +1304,7 @@ h1,p{margin:0}
     });
   });
 
+  // 시작
   hasBackend().then(function (ok) {
     BACKEND = ok;
     if (ok) { document.getElementById('loginBtn').hidden = false; }
@@ -1302,6 +1321,7 @@ h1,p{margin:0}
     }
   });
 
+  // 이미지 저장 · 공유
   var H2C_URL = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
   function showToast(msg, ms) {
     toastEl.textContent = msg;
@@ -1401,6 +1421,7 @@ h1,p{margin:0}
     typeLogin();
   });
 
+  // 기록 지우기
   document.getElementById('wipe').addEventListener('click', function () {
     BOJ = null;
     var done = function () { showToast('> 서버에 있던 내 기록을 지웠어요', 2200); setTimeout(function () { location.href = '/'; }, 900); };
