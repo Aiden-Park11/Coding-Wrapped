@@ -71,8 +71,7 @@ def test_public_endpoints(monkeypatch):
     c = _setup(monkeypatch)
     assert c.get("/health").json()["ok"] is True
     assert c.get("/api/wrapped").status_code == 401
-    demo = c.get("/api/demo").json()
-    assert demo["data"]["numbers"]["commits"] == 1284
+    assert c.get("/api/demo").status_code == 404   # 데모 데이터 제거됨
     assert c.get("/api/boj", params={"handle": "bad handle!"}).status_code == 400
     assert c.get("/").status_code == 200   # prototype 서빙
 
